@@ -5,7 +5,7 @@ class Class(db.Model):
 
 	id =    db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(50))
-	roll = db.relationship('Roll_Class', backref='class', lazy='dynamic')
+	roll =  db.relationship('Roll_Class', backref='class', lazy='dynamic')
 
 	def __repr__(self):
 		return "<Class: {}>".format(self.title)
@@ -26,7 +26,7 @@ class Person(db.Model):
 	id =           db.Column(db.Integer, primary_key=True)
 	student_id =   db.Column(db.Integer)
 	student_name = db.Column(db.String(50))
-	rfid =         db.Column(db.Blob)
+	rfid =         db.Column(db.BLOB)
 	roll =         db.relationship('Roll_Person', backref='person', lazy='dynamic')
 
 	def __repr__(self):
