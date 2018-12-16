@@ -29,7 +29,6 @@ class Class(db.Model):
 
 	id =    db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(50))
-	roll =  db.relationship('Roll', backref='class', lazy='dynamic')
 	users = db.relationship("Access", backref="class", lazy="dynamic")
 
 	def __repr__(self):
@@ -40,7 +39,7 @@ class Roll(db.Model):
 
 	id =       db.Column(db.Integer, primary_key=True)
 	date =     db.Column(db.Date, default=date.today())
-	class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+	class_id = db.Column(db.Integer)
 	roll =     db.relationship("Roll_Student", backref="roll", lazy="dynamic")
 
 	def __repr__(self):
@@ -54,7 +53,7 @@ class Student(db.Model):
 	student_id =   db.Column(db.Integer)
 	student_name = db.Column(db.String(50))
 	rfid =         db.Column(db.BLOB)
-	roll =         db.relationship("Roll_Student", backref="student", lazy-"dynamic")
+	roll =         db.relationship("Roll_Student", backref="student", lazy="dynamic")
 
 	def __repr__(self):
 		return "<Student, id: {}, name: {}, dbId: {}>".format(self.student_id, self.student_name, self.id)
