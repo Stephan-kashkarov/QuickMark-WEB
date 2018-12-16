@@ -1,5 +1,6 @@
 from app import db, login
 from flask_login import UserMixin
+from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 
 @login.user_loader
@@ -7,12 +8,29 @@ def load_user(id):
 	"""User loader for flask login."""
 	return Person.query.get(int(id))
 
+# INTERMIDEARY TABLES
+class Access(db.Model):
+	__tablename__ = "access"
+
+	person_id = db.Column(db.Integer, db.ForeignKey("person.id"), primary_key=True)
+	class_id =  db.Column(db.Integer, db.ForeignKey("class.id"), primary_key=True)
+
+class Roll_Student(db.Model):
+	__tablename__ = "roll_student"
+
+	roll_id = db.Column(db.Integer, db.ForeignKey("roll.id"), primary_key=True)
+	student_id = db.Column(db.Integer, db.ForeignKey("student.id"), primary_key=True)
+	present = db.Column(db.Boolean, default=False)
+
+
+# DATA TABLES
 class Class(db.Model):
 	__tablename__ = "class"
 
 	id =    db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(50))
-	roll =  db.relationship('Roll_Class', backref='class', lazy='dynamic')
+	roll =  db.relationship('Roll', backref='class', lazy='dynamic')
+	users = db.relationship("Access", backref="class", lazy="dynamic")
 
 	def __repr__(self):
 		return "<Class: {}>".format(self.title)
@@ -20,8 +38,10 @@ class Class(db.Model):
 class Roll(db.Model):
 	__tablename__ = "roll"
 
-	class_id =   db.Column(db.Integer, db.ForeignKey('class.id'),  primary_key=True)
-	student_id = db.Column(db.Integer, db.ForeignKey('student.id'), primary_key=True)
+	id =       db.Column(db.Integer, primary_key=True)
+	date =     db.Column(db.Date, default=date.today())
+	class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+	roll =     db.relationship("Roll_Student", backref="roll", lazy="dynamic")
 
 	def __repr__(self):
 		return "<Roll object Student: {} is in Class: {}>".format(self.student_id, self.class_id)
@@ -34,18 +54,21 @@ class Student(db.Model):
 	student_id =   db.Column(db.Integer)
 	student_name = db.Column(db.String(50))
 	rfid =         db.Column(db.BLOB)
-	roll =         db.relationship('Roll_student', backref='student', lazy='dynamic')
+	roll =         db.relationship("Roll_Student", backref="student", lazy-"dynamic")
 
 	def __repr__(self):
 		return "<Student, id: {}, name: {}, dbId: {}>".format(self.student_id, self.student_name, self.id)
 
 
+# USER TABLES
 class Person(db.Model, UserMixin):
 	__tablename__ = "person"
 
 	id =            db.Column(db.Integer, primary_key=True)
 	username =      db.Column(db.String(64), index=True, unique=True)
 	password_hash = db.Column(db.String(128))
+	logins =        db.Column(db.Integer)
+	classes =       db.relationship("Access", backref="person", lazy="dynamic")
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
