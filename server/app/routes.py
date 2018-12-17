@@ -66,6 +66,13 @@ def register():
 
 	return render_template("auth/register.html")
 
+@login_required
+@app.route("/auth/logout", methods=["POST"])
+def logout():
+	logout_user()
+	return 200
+
+
 # CLASS ROUTES
 @app.route("/<class_id>/mark")
 def mark(class_id):
