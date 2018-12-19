@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+	<a class="navbar-brand" href="#">QuickMark</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+	 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item active">
+				<a class="nav-link" href="#">Home</a>
+			</li>
+			{% if current_user.is_authenticated %}
+			<li class="nav-item active">
+				<a class="nav-link" href="#">Dash</a>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link" href="#">Classes</a>
+			</li>
+			{% endif %}
+		</ul>
+		<div class="btn-group">
+			{% if not current_user.is_authenticated %}
+			<button type="button" class="btn btn-secondary nav-login">Login</button>
+			{% else %}
+			{% if user %}
+			<button type="button" class="btn btn-secondary nav-profile">{{user.name}}</button>
+			{% else %}
+			<button type="button" class="btn btn-secondary nav-profile">Account</button>
+			{% endif %}
+			{% endif %}
+			<button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
+			aria-haspopup="true" aria-expanded="false">
+				<span class="sr-only">Toggle Dropdown</span>
+			</button>
+			<div class="dropdown-menu">
+				{% if not current_user.is_authenicated %}
+				<a class="dropdown-item" href="#">Login</a>
+				<a class="dropdown-item" href="#">Register</a>
+				{% else %}
+				<a class="dropdown-item" href="#">Account</a>
+				<a class="dropdown-item" href="#">Settings</a>
+				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" href="#">Logout</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</nav>
+{% endblock %}
+
+{% block footer %}
+<div class="footer">
+	<hr>
+	<p><small>Made by Stephan Kashkarov | gitbub: https://github.com/Stephan-kashkarov/KeepCheck</small></p>
+</div>
+{% endblock %}

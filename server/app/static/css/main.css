@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:300,400');
+* {
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.footer {
+	text-align: center;
+	background-color: #6c757d;
+	color: white;
+}
+
+.footer p {
+	font-weight: 300;
+	padding: 20px;
+}
+
+.footer hr {
+	background-color: black;
+}

@@ -6,7 +6,7 @@ from flask_login import current_user, login_user, login_required, logout_user
 
 @app.route("/")
 def index():
-	return "Hello!"
+	return render_template("main.html")
 
 @login_required
 @app.route("/dash")
