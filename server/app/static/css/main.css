@@ -17,3 +17,11 @@
 .footer hr {
 	background-color: black;
 }
+
+input .is-valid {
+	border-color: #28a745 !important;
+}
+
+input .is-invalid {
+	border-color: #dc3545 !important;
+}

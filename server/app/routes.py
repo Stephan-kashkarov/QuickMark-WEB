@@ -19,10 +19,11 @@ def login():
 	if request.method == "POST":
 		# incase there is no json
 		try:
-			data = request.json()
+			data = request.json
 		except:
 			data = None
 			flash("Server: No data in json")
+			return "No json"
 
 		if data:
 			username = data["username"]
@@ -35,8 +36,10 @@ def login():
 					flash("Login succsessful!")
 					user.logins += 1
 					db.session.commit()
-					return redirect(url_for("/dash"))
+					return "Success"
 				flash("Login unsucsessful!")
+				return "Incorrect login"
+			return "No User"
 	return render_template("auth/login.html")
 
 @app.route("/auth/register", methods=["GET", "POST"])
@@ -67,10 +70,10 @@ def register():
 	return render_template("auth/register.html")
 
 @login_required
-@app.route("/auth/logout", methods=["POST"])
+@app.route("/auth/logout", methods=["POST", "GET"])
 def logout():
 	logout_user()
-	return 200
+	return "200"
 
 
 # CLASS ROUTES
