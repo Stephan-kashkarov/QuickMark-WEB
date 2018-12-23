@@ -4,19 +4,103 @@
 <script src="{{url_for('.static', filename='js/auth.js')}}"></script>
 {% endblock %}
 {% block body %}
-<form>
-	<div class="form-group">
-		<label for="username">Username</label>
-		<input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter Username">
+<div class="jumbotron">
+	<h1 class="display-4">Welcome!</h1>
+	<p class="lead">
+		PLACEHOLDER DESCRIPTION
+	</p>
+	<hr class="my-4">
+	<p>If you already have an account please login below. Otherwise register for this service below</p>
+	<nav class="nav nav-pills nav-justified nav-tabs">
+		<a class="nav-item nav-link active" href="#">Login</a>
+		<a class="nav-item nav-link" href="#">Register</a>
+	</nav>
+	<div class="login-form">
+		<form>
+			<div class="form-group">
+				<label for="username">Username</label>
+				<input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter Username">
+			</div>
+			<div class="form-group">
+				<label for="password">Password</label>
+				<input type="password" class="form-control" id="password" placeholder="Password">
+			</div>
+			<div class="form-group form-check">
+				<input type="checkbox" class="form-check-input" id="remember">
+				<label class="form-check-label" for="remember">Remeber me</label>
+			</div>
+			<button type="submit" class="btn btn-primary login-submit">Login</button>
+		</form>
 	</div>
-	<div class="form-group">
-		<label for="password">Password</label>
-		<input type="password" class="form-control" id="password" placeholder="Password">
+	<div class="register-form">
+		<form>
+			<div class="form-group">
+				<label for="register-username">Username</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="inputGroupPrepend3">@</span>
+					</div>
+					<input type="text" class="form-control" id="register-username" placeholder="Enter a username"
+					aria-describedby="inputGroupPrepend3" required>
+					<div class="invalid-feedback">
+						Useraname taken or empty
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="register-email">Email (Optional | Notifications)</label>
+				<div class="input-group">
+					<input type="text" class="form-control" id="register-email" placeholder="Enter an email">
+					<div class="invalid-feedback">
+						Email taken, invalid or empty
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="register-pass1">Password</label>
+				<input type="password" class="form-control" id="register-pass1" placeholder="Enter a passoword" required>
+				<div class="invalid-feedback">
+					Passoword empty
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="register-pass2">Confirm Password</label>
+				<input type="password" class="form-control" id="register-pass2" placeholder="Re-type your password" required>
+				<div class="invalid-feedback">
+					Passoword dosent match
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary register-submit">Create new account</button>
+		</form>
 	</div>
-	<div class="form-group form-check">
-		<input type="checkbox" class="form-check-input" id="remember">
-		<label class="form-check-label" for="remember">Remeber me</label>
-	</div>
-	<button type="submit" class="btn btn-primary login-submit">Login</button>
-</form>
+</div>
 {% endblock %}
+
+<div class="jumbotron">
+	<h1 class="display-4">Welcome!</h1>
+	<p class="lead">
+		PLACEHOLDER DESCRIPTION
+	</p>
+	<hr class="my-4">
+	<p>If you already have an account please login below. Otherwise register for this service below</p>
+	<div class="login" style="display: none;">
+		<form>
+			<div class="form-group">
+				<label for="username">Username</label>
+				<input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter Username">
+			</div>
+			<div class="form-group">
+				<label for="password">Password</label>
+				<input type="password" class="form-control" id="password" placeholder="Password">
+			</div>
+			<div class="form-group form-check">
+				<input type="checkbox" class="form-check-input" id="remember">
+				<label class="form-check-label" for="remember">Remeber me</label>
+			</div>
+			<button type="submit" class="btn btn-primary login-submit">Login</button>
+		</form>
+	</div>
+	<div class="register">
+
+	</div>
+</div>

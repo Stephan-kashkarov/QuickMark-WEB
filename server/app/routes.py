@@ -42,32 +42,30 @@ def login():
 			return "No User"
 	return render_template("auth/login.html")
 
-@app.route("/auth/register", methods=["GET", "POST"])
+@app.route("/auth/register", methods=["POST"])
 def register():
-	# incase there is no json
-	if request.method == "POST":
-		try:
-			data = request.json()
+	try:
+		data = request.json()
+	except:
+		data = None
+		flash("Server: No data in json")
+		return "No Json"
 
-		except:
-			data = None
-			flash("Server: No data in json")
+	if data:
+		username = data['username']
+		email = data['email']
+		password = data['password']
+		if not Person.query.filter_by(username=username).first():
+			p = Person()
+			p.username = username
+			p.email = email
+			p.set_password(password)
+			db.session.add(p)
+			db.session.commit(p)
+			flash("User created, Try logging in!")
+			return "Success"
+		return "User Exists"
 
-		if data:
-			username = data['username']
-			email = data['email']
-			password = data['password']
-			if not Person.query.filter_by(username=username):
-				p = Person()
-				p.username = username
-				p.email = email
-				p.set_password(password)
-				db.session.add(p)
-				db.session.commit(p)
-				flash("User created, Try logging in!")
-				return redirect(url_for("auth/login"))
-
-	return render_template("auth/register.html")
 
 @login_required
 @app.route("/auth/logout", methods=["POST", "GET"])

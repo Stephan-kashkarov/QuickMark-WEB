@@ -3,15 +3,35 @@
 	font-family: 'Ubuntu', sans-serif;
 }
 
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.main{
+	min-height: 83%;
+	padding-top: 20px;
+}
+
+.main form {
+	background-color: #e9ecef;
+	padding: 3%;
+}
+
 .footer {
 	text-align: center;
 	background-color: #6c757d;
 	color: white;
+	min-height: 10%;
 }
 
 .footer p {
 	font-weight: 300;
 	padding: 20px;
+	margin-bottom: 0;
 }
 
 .footer hr {
