@@ -26,27 +26,23 @@
 			{% if not current_user.is_authenticated %}
 			<button type="button" class="btn btn-secondary nav-login">Login</button>
 			{% else %}
-			{% if user %}
+				{% if user %}
 			<button type="button" class="btn btn-secondary nav-profile">{{user.name}}</button>
-			{% else %}
+				{% else %}
 			<button type="button" class="btn btn-secondary nav-profile">Account</button>
-			{% endif %}
-			{% endif %}
+				{% endif %}
+			
 			<button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
 			aria-haspopup="true" aria-expanded="false">
 				<span class="sr-only">Toggle Dropdown</span>
 			</button>
 			<div class="dropdown-menu">
-				{% if not current_user.is_authenicated %}
-				<a class="dropdown-item nav-login" href="#">Login</a>
-				<a class="dropdown-item nav-register" href="#">Register</a>
-				{% else %}
 				<a class="dropdown-item" href="#">Account</a>
 				<a class="dropdown-item" href="#">Settings</a>
 				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="#">Logout</a>
-				{% endif %}
+				<a class="dropdown-item" href="{{url_for('logout')}}">Logout</a>
 			</div>
+			{% endif %}
 		</div>
 	</div>
 </nav>

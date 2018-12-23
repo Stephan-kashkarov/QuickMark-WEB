@@ -11,7 +11,7 @@ def index():
 @login_required
 @app.route("/dash")
 def dash():
-	return "dash!"
+	return render_template("dash.html")
 
 # AUTH ROUTES
 @app.route("/auth", methods=["GET", "POST"])
@@ -63,7 +63,7 @@ def login():
 @app.route("/auth/logout", methods=["POST", "GET"])
 def logout():
 	logout_user()
-	return "200"
+	return redirect(url_for('login'))
 
 
 # CLASS ROUTES
