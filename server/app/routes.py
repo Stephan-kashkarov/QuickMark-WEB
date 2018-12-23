@@ -14,7 +14,7 @@ def dash():
 	return "dash!"
 
 # AUTH ROUTES
-@app.route("/auth/login", methods=["GET", "POST"])
+@app.route("/auth", methods=["GET", "POST"])
 def login():
 	if request.method == "POST":
 		# incase there is no json
@@ -26,45 +26,37 @@ def login():
 			return "No json"
 
 		if data:
-			username = data["username"]
-			password = data["passowrd"]
+			if data['type'] == 'login':
+				username = data["username"]
+				password = data["passowrd"]
 
-			user = Person.query.filter_by(username=username).first()
-			if user:
-				if user.check_password(password):
-					login_user(user)
-					flash("Login succsessful!")
-					user.logins += 1
+				user = Person.query.filter_by(username=username).first()
+				if user:
+					if user.check_password(password):
+						login_user(user)
+						flash("Login succsessful!")
+						user.logins += 1
+						db.session.commit()
+						return "Success"
+					flash("Login unsucsessful!")
+					return "Incorrect login"
+				return "No User"
+			else:
+				username = data['username']
+				email = data['email']
+				password = data['password']
+				if not Person.query.filter_by(username=username).first():
+					p = Person()
+					p.username = username
+					p.email = email
+					p.set_password(password)
+					db.session.add(p)
 					db.session.commit()
+					flash("User created, Try logging in!")
 					return "Success"
-				flash("Login unsucsessful!")
-				return "Incorrect login"
-			return "No User"
-	return render_template("auth/login.html")
+				return "User Exists"
 
-@app.route("/auth/register", methods=["POST"])
-def register():
-	try:
-		data = request.json()
-	except:
-		data = None
-		flash("Server: No data in json")
-		return "No Json"
-
-	if data:
-		username = data['username']
-		email = data['email']
-		password = data['password']
-		if not Person.query.filter_by(username=username).first():
-			p = Person()
-			p.username = username
-			p.email = email
-			p.set_password(password)
-			db.session.add(p)
-			db.session.commit(p)
-			flash("User created, Try logging in!")
-			return "Success"
-		return "User Exists"
+	return render_template("auth.html")	
 
 
 @login_required

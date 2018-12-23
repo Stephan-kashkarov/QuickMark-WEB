@@ -16,7 +16,7 @@
 		<a class="nav-item nav-link" href="#">Register</a>
 	</nav>
 	<div class="login-form">
-		<form>
+		<form class="needs-validation">
 			<div class="form-group">
 				<label for="username">Username</label>
 				<input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter Username">
@@ -33,7 +33,7 @@
 		</form>
 	</div>
 	<div class="register-form">
-		<form>
+		<form class="needs-validation">
 			<div class="form-group">
 				<label for="register-username">Username</label>
 				<div class="input-group">
@@ -75,32 +75,3 @@
 	</div>
 </div>
 {% endblock %}
-
-<div class="jumbotron">
-	<h1 class="display-4">Welcome!</h1>
-	<p class="lead">
-		PLACEHOLDER DESCRIPTION
-	</p>
-	<hr class="my-4">
-	<p>If you already have an account please login below. Otherwise register for this service below</p>
-	<div class="login" style="display: none;">
-		<form>
-			<div class="form-group">
-				<label for="username">Username</label>
-				<input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter Username">
-			</div>
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input type="password" class="form-control" id="password" placeholder="Password">
-			</div>
-			<div class="form-group form-check">
-				<input type="checkbox" class="form-check-input" id="remember">
-				<label class="form-check-label" for="remember">Remeber me</label>
-			</div>
-			<button type="submit" class="btn btn-primary login-submit">Login</button>
-		</form>
-	</div>
-	<div class="register">
-
-	</div>
-</div>

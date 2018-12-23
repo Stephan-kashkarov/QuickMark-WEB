@@ -33,6 +33,7 @@ $(function(){
 	$(".login-submit").on('click', async (e) => {
 		e.preventDefault()
 		formData = {
+			"type": "login",
 			'username': $("#username").val(),
 			'passowrd': $("#password").val(),
 			"remember": $("#remember").val()
@@ -83,5 +84,47 @@ $(function(){
 					break
 			}
 		})
+	})
+
+	$(".register-submit").on('click', async (e) => {
+		e.preventDefault()
+
+		console.log("Regestering user")
+		
+
+		var user, email, pass = [false, false, false]
+
+		var formData = {
+			"type": "register",
+			"username": $("#register-username").val(),
+			"email": $("#register-email").val(),
+			"password": $("#register-pass1").val(),
+			"passCheck": $("#register-pass2").val()
+		}
+		console.log(formData)
+		if (formData["password"] === formData["passCheck"]){
+			pass = true
+		}
+		if (/(.+)@(.+){2,}\.(.+){2,}/.test(formData["email"])){
+			email = true
+		}
+		if (formData['username'].length >= 3){
+			user = true
+		}
+
+		console.log({user, email, pass})
+
+		if (user && email && pass)  {
+			$.ajax({
+				url: window.location,
+				method: "POST",
+				data: JSON.stringify(formData),
+				contentType: "application/json charset=utf-8",
+				dataType: "json"
+			}).fail( (err) => {
+				console.log(err)
+				console.log(err.responseText)
+			})
+		}
 	})
 })
