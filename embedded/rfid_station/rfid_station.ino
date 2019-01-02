@@ -81,10 +81,32 @@ bool connectToHost(char* host, int port)
 
 void postToHost(char* host, int port, char* data)
 {
-	connectToHost(host, port);
+	if (connectToHost(host, port))
+	{
+		
+	}
 }
 
 void getToHost(char *host, int port, char* data)
 {
+	if (connectToHost(host, port))
+	{
+		Serial.println("[Sending a request]");
+		client.print(String("GET /") + " HTTP/1.1\r\n" +
+					 "Host: " + host + "\r\n" +
+					 "Connection: close\r\n" +
+					 "\r\n");
 
+		Serial.println("[Response:]");
+		while (client.connected() || client.available())
+		{
+			if (client.available())
+			{
+				String line = client.readStringUntil('\n');
+				Serial.println(line);
+			}
+		}
+		client.stop();
+		Serial.println("\n[Disconnected]");
+	}
 }
