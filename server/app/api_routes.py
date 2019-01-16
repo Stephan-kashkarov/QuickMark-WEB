@@ -62,7 +62,6 @@ def apiClassGet():
                     'students': [],
                 },
             },
-            'size': 0
         }
 
         for student in students:
@@ -74,10 +73,9 @@ def apiClassGet():
             }
             result['class']['roll']['students'].append(studentObj)
 
-        result['size'] = len(json.dumps(result).encode('utf-8'))
         print("Packaged!")
         pprint.pprint(result)
-        return jsonify(result)
+        return jsonify([len(json.dumps(result).encode('utf-8')), result])
 
 
     return "invalid auth"
