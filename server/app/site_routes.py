@@ -1,6 +1,6 @@
-from app import app, db
+from server.app import app, db
 from flask import redirect, url_for, flash, render_template, request
-from app.models import Class, Roll, Student, Person 
+from server.app.models import Class, Roll, Student, Person 
 
 from flask_login import current_user, login_user, login_required, logout_user
 

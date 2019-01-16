@@ -1,5 +1,5 @@
-from app import app, db
-from app.models import Person, Class, Roll, Student
+from server.app import app, db
+from server.app.models import Person, Class, Roll, Student
 
 
 @app.shell_context_processor

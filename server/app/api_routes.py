@@ -10,8 +10,8 @@ from flask import (
     url_for
 )
 
-from app import app, db
-from app.models import (
+from server.app import app, db
+from server.app.models import (
     Class,
     Class_Student,
     Person,
