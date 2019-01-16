@@ -27,7 +27,7 @@ def apiClassGet():
             temp.student_id = student.id
             db.session.add(temp)
             students[index] = Student.query.get(int(student.student_id))
-
+        db.session.commit()
         print(f"Class queryed: {roll}")
         print(f"The roll contains {len(students)} students:")
         for index, student in enumerate(students):
@@ -40,9 +40,7 @@ def apiClassGet():
                 'title': roll.title,
                 'roll': {
                     'roll_id': rollObj.id,
-                    'students': [
-
-                    ],
+                    'students': [],
                 },
             },
         }
@@ -61,4 +59,4 @@ def apiClassGet():
         return jsonify(result)
 
 
-    return 'false'
+    return "invalid auth"
