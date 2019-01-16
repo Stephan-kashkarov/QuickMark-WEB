@@ -1,17 +1,21 @@
-// code based on https://github.com/miguelbalboa/rfid/blob/master/examples/DumpInfo/DumpInfo.ino
-
+// RFID libs
 #include <SPI.h>
 #include <MFRC522.h>
+
+// Web stuff
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <ArduinoJson.h>
 
 #define RST_PIN 9 // Configurable, see typical pin layout above
 #define SS_PIN 10 // Configurable, see typical pin layout above
+#define DEVICE_ID 0
+#define DEVICE_PASSWORD "admin123"
 
 MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance
 
 const char* host = "www.example.com";
+int currentClassId;
 
 void setup()
 {
@@ -58,14 +62,14 @@ void getUid()
 
 }
 
-bool connectToHost(char* host, int port)
+bool connectToHost(char* host, int port = 5000)
 {
 	Serial.println("[Connecting to host]");
 	int c = 0;
 
 	while (true)
 	{
-		client.connect(host, 5000)
+		client.connect(host, port)
 			? break
 			: Serial.println("[Connected failed]");
 		(c != 20) ? break : ++c;
@@ -82,7 +86,7 @@ bool connectToHost(char* host, int port)
 }
 
 
-void getClass(char *host, int port, char* data){
+void getClass(char *host, char* data, int port = 10000 ){
 	// Check WiFi Status
 	if (WiFi.status() == WL_CONNECTED) {
 		// JSON variables
@@ -90,24 +94,44 @@ void getClass(char *host, int port, char* data){
 		JsonObject& JSONencoder = JSONbuffer.createObject();
 		char JSONmessageBuffer[300];
 
+		// * EXAMPLE JSON POST OBJECT
+		//{
+		//	"auth": {
+		//		"id": int,
+		//		"password": String,
+		//	},
+		//	"payload": {
+		//		"class_id": int,
+		//	},
+		//}
+		JsonObject& auth = JSONencoder.createNestedObject("auth");
+		auth["id"] = DEVICE_ID;
+		auth["password"] = DEVICE_PASSWORD;
+		JsonObject& payload = JSONencoder.createNestedObject("payload");
+		payload["class_id"] = currentClassId;
 		// JSON encoding
 		// TODO: Encode object
 		JSONencoder.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
 
+
 		// HTTP setup
 		HTTPClient http;  //Object of class HTTPClient
 		char* url;
-		sprintf(url, "%s:%s/api/get/class", host, port);
+		if port > 9999{
+			sprintf(url, "%s/api/get/class", host);
+		} else {
+			sprintf(url, "%s:%04d/api/get/class", host, port);
+		}
 		http.begin(url);
 		http.addHeader("Content-Type", "application/json");
  
 		// Request and result parsing
 		int httpCode = http.POST(JSONMessegeBuffer);
 		char* payload = http.getString();
-		Serial.println(httpCode);   //Print HTTP return code
-		Serial.println(payload);    //Print request response payload
+		Serial.println(httpCode);   // Print HTTP return code
+		Serial.println(payload);    // Print request response payload
 		// TODO: parse new object
  
-		http.end();   //Close connection
+		http.end();   // Close connection
 	}
 }

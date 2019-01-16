@@ -1,7 +1,26 @@
-from app import app, db
-from flask import redirect, url_for, flash, render_template, request, jsonify
-from app.models import Class, Roll, Student, Person, RFIDStation, Roll_Student, Class_Student
+import json
 import pprint
+
+from flask import (
+    flash,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    url_for
+)
+
+from app import app, db
+from app.models import (
+    Class,
+    Class_Student,
+    Person,
+    RFIDStation,
+    Roll,
+    Roll_Student,
+    Student
+)
+
 
 def authStation(s_id, password):
     station = RFIDStation.query.get_or_404(int(s_id))
@@ -43,6 +62,7 @@ def apiClassGet():
                     'students': [],
                 },
             },
+            'size': 0
         }
 
         for student in students:
@@ -54,6 +74,7 @@ def apiClassGet():
             }
             result['class']['roll']['students'].append(studentObj)
 
+        result['size'] = len(json.dumps(result).encode('utf-8'))
         print("Packaged!")
         pprint.pprint(result)
         return jsonify(result)
