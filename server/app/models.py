@@ -22,14 +22,21 @@ class Roll_Student(db.Model):
 	student_id = db.Column(db.Integer, db.ForeignKey("student.id"), primary_key=True)
 	present = db.Column(db.Boolean, default=False)
 
+class Class_Student(db.Model):
+	__tablename__ = "roll_student"
+
+	roll_id = db.Column(db.Integer, db.ForeignKey("class.id"), primary_key=True)
+	student_id = db.Column(db.Integer, db.ForeignKey("student.id"), primary_key=True)
+
 
 # DATA TABLES
 class Class(db.Model):
 	__tablename__ = "class"
 
-	id =    db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.String(50))
-	users = db.relationship("Access", backref="class", lazy="dynamic")
+	id =           db.Column(db.Integer, primary_key=True)
+	title =        db.Column(db.String(50))
+	users =        db.relationship("Access", backref="class", lazy="dynamic")
+	students =     db.relationship("Roll_Class", backref="class", lazy="dynamic")
 
 	def __repr__(self):
 		return "<Class: {}>".format(self.title)
@@ -72,6 +79,23 @@ class Person(db.Model, UserMixin):
 
 	def __repr__(self):
 		return '<User {}>'.format(self.username)
+
+	def set_password(self, password):
+		"""Runs the passwords through a hash and appends."""
+		self.password_hash = generate_password_hash(str(password))
+
+	def check_password(self, password):
+		"""Checks a password against the hash."""
+		return check_password_hash(self.password_hash, password)
+
+class RFIDStation(db.Model):
+	__tablename__ = "rfid_station"
+	id =            db.Column(db.Integer, primary_key=True)
+	name =          db.Column(db.String(64))
+	password_hash = db.Column(db.String(128))
+
+	def __repr__(self):
+		return '<Station {}>'.format(self.name)
 
 	def set_password(self, password):
 		"""Runs the passwords through a hash and appends."""
