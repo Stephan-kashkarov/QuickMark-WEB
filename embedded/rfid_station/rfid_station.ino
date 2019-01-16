@@ -3,6 +3,8 @@
 #include <SPI.h>
 #include <MFRC522.h>
 #include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+#include <ArduinoJson.h>
 
 #define RST_PIN 9 // Configurable, see typical pin layout above
 #define SS_PIN 10 // Configurable, see typical pin layout above
@@ -79,7 +81,7 @@ bool connectToHost(char* host, int port)
 	}
 }
 
-void postToHost(char* host, int port, char* data)
+void printPostToHost(char* host, int port, char* data)
 {
 	if (connectToHost(host, port))
 	{
@@ -87,7 +89,7 @@ void postToHost(char* host, int port, char* data)
 	}
 }
 
-void getToHost(char *host, int port, char* data)
+void printGetToHost(char *host, int port, char* data)
 {
 	if (connectToHost(host, port))
 	{
@@ -108,5 +110,35 @@ void getToHost(char *host, int port, char* data)
 		}
 		client.stop();
 		Serial.println("\n[Disconnected]");
+	}
+}
+
+void getClass(char *host, int port, char* data){
+	// Check WiFi Status
+	if (WiFi.status() == WL_CONNECTED) {
+		// JSON variables
+		StaticJsonBuffer<300> JSONbuffer;
+		JsonObject& JSONencoder = JSONbuffer.createObject();
+		char JSONmessageBuffer[300];
+
+		// JSON encoding
+		// TODO: Encode object
+		JSONencoder.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
+
+		// HTTP setup
+		HTTPClient http;  //Object of class HTTPClient
+		char* url;
+		sprintf(url, "%s:%s/api/get/class", host, port);
+		http.begin(url);
+		http.addHeader("Content-Type", "application/json");
+ 
+		// Request and result parsing
+		int httpCode = http.POST(JSONMessegeBuffer);
+		char* payload = http.getString();
+		Serial.println(httpCode);   //Print HTTP return code
+		Serial.println(payload);    //Print request response payload
+		// TODO: parse new object
+ 
+		http.end();   //Close connection
 	}
 }
