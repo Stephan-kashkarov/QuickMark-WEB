@@ -67,7 +67,7 @@ void getClass(int port = 10000 ){
 		JSONencoder.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
 
 
-		// * HTTP setup
+		// * HTTP setup - this works outside esp8266
 		// POST /api/get/class HTTP/1.1
 		// Host: steph-rfid-quickmark.herokuapp.com
 		// Content-Type: application/json
@@ -93,7 +93,7 @@ void getClass(int port = 10000 ){
 		// if (client.connect(HOST, 80)){
 		// 	Serial.println("Connecting to host");
 		// 	Serial.println("_______________________________________");
-		// 	client.print("POST /api/get/class HTTPS/1.1\r\n");
+		// 	client.print("POST /api/get/class HTTP/1.1\r\n");
 		// 	client.print("Host: steph-rfid-quickmark.herokuapp.com\r\n");
 		// 	client.print("Content-Type: application/json\r\n");
 		// 	client.print("Content-Length: 300\r\n");
