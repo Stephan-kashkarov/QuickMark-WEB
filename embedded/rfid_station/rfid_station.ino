@@ -12,14 +12,14 @@
 #define DEVICE_ID 1
 #define DEVICE_PASSWORD "admin123"
 #define NETWORK_NAME "BudiiLite-primary6537AF"
-#define NETWORK_PASS "PASSWORD"
-#define HOSTSTART https://steph-rfid-quickmark.herokuapp.com
-#define HOSTEND
+#define NETWORK_PASS "********"
+#define HOST "https://steph-rfid-quickmark.herokuapp.com"
+#define THUMBPRINT "2F 0E 48 24 F8 BA 05 3E 42 40 77 76 55 61 50 F0 2A DA 58 D2 05 FB 16 90 B8 1D A6 6D DD 76 C1 E4"
 
 MFRC522 rfid(SS_PIN, RST_PIN); // Create MFRC522 instance
 WiFiClient client;
 
-int currentClassId;
+int currentClassId = 1;
 
 void scanForRfid()
 {
@@ -37,40 +37,6 @@ void getUid()
 
 }
 
-bool connectToHost(char* host, int port = 5000)
-{
-	Serial.println("[Connecting to host]");
-	int c = 0;
-
-	while (true)
-	{
-		if(client.connect(host, port))
-		{
-			break;
-		}
-		else
-		{
-			Serial.println("[Connected failed]");
-		}
-		if (c != 20)
-		{
-			break;
-		}
-		else
-		{
-			++c;
-		}
-		delay(1000);
-	}
-
-	if (client.connected()){
-		Serial.println("[Connected to host]");
-		return true;
-	} else {
-		Serial.println("[Connection timed out]");
-		return false;
-	}
-}
 
 
 void getClass(int port = 10000 ){
@@ -102,29 +68,72 @@ void getClass(int port = 10000 ){
 
 
 		// * HTTP setup
+		// POST /api/get/class HTTP/1.1
+		// Host: steph-rfid-quickmark.herokuapp.com
+		// Content-Type: application/json
+		// cache-control: no-cache
+		// Postman-Token: 8620daf9-d12a-47a5-b766-4e222902249c
+		// {
+		// "auth": {
+		// 	"id": 1,
+		// 	"password": "admin123"
+		// },
+		// "payload": {
+		// 	"class_id": 0
+		// }
+		// }------WebKitFormBoundary7MA4YWxkTrZu0gW--
+		
 		HTTPClient http;  //Object of class HTTPClient
-		char* url = "https://steph-rfid-quickmark.herokuapp.com/api/get/class";
-		// if (port > 9999)
-		// {
-		// 	sprintf(url, "%s/api/get/class", host);
-		// }
-		// else
-		// {
-		// 	sprintf(url, "%s:%04d/api/get/class", host, port);
-		// }
-		http.begin(url);
+		http.begin(HOST, THUMBPRINT);
 		http.addHeader("Content-Type", "application/json");
  
 		// * Request and result parsing
 		Serial.println("Sending object: ");
 		JSONencoder.prettyPrintTo(Serial);
+		// if (client.connect(HOST, 80)){
+		// 	Serial.println("Connecting to host");
+		// 	Serial.println("_______________________________________");
+		// 	client.print("POST /api/get/class HTTPS/1.1\r\n");
+		// 	client.print("Host: steph-rfid-quickmark.herokuapp.com\r\n");
+		// 	client.print("Content-Type: application/json\r\n");
+		// 	client.print("Content-Length: 300\r\n");
+		// 	client.print("cache-control: no-cache\r\n");
+		// 	client.print(JSONmessageBuffer);
+		// 	client.println("------WebKitFormBoundary7MA4YWxkTrZu0gW--");
+		// 	Serial.println("_______________________________________");
+		// 	Serial.println("HTTP sent");
+
+		// }
+		// long interval = 2000;
+		// unsigned long currentMillis = millis(), previousMillis = millis();
+		// Serial.println("Waiting for reponse");
+		// while(!client.available()){
+
+		// 	if((currentMillis - previousMillis) > interval)
+		// 	{
+
+		// 		Serial.println("Timeout");
+		// 		client.stop();     
+		// 		return;
+		// 	}
+		// 	currentMillis = millis();
+		// }
+
+		// while (client.connected())
+		// {
+		// 	if (client.available())
+		// 	{
+		// 		char str = client.read();
+		// 		Serial.print(str);
+		// 	}      
+		// }
 		int httpCode = http.POST(JSONmessageBuffer);
 		Serial.println("\n Data sent");
 		String output = http.getString();
 		Serial.print("Response code: ");
 		Serial.println(httpCode);   // Print HTTP return code
-		Serial.print("Response JSON");
-		Serial.println(output);    // Print request response output
+		Serial.print("Response JSON: ");
+		http.writeToStream(&Serial);
 		// TODO: parse new object
  
 		http.end();   // Close connection
