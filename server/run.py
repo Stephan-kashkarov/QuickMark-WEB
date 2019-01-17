@@ -1,5 +1,5 @@
 from server.app import app, db
-from server.app.models import Person, Class, Roll, Student
+from server.app.models import Person, Class, Roll, Student, RFIDStation
 
 
 @app.shell_context_processor
