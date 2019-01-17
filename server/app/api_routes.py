@@ -36,7 +36,7 @@ def apiClassGet():
         station = authStation(auth['id'], auth['password'])
         if station:
             data = data['payload']
-            roll = Class.query.get(data['class_id'])
+            roll = Class.query.get_or_404(data['class_id'])
             rollObj = Roll()
             rollObj.class_id = roll.id
             db.session.add(rollObj)
