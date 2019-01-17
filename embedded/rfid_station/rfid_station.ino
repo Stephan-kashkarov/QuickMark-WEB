@@ -9,42 +9,17 @@
 
 #define RST_PIN 9 // Configurable, see typical pin layout above
 #define SS_PIN 10 // Configurable, see typical pin layout above
-#define DEVICE_ID 0
+#define DEVICE_ID 1
 #define DEVICE_PASSWORD "admin123"
+#define NETWORK_NAME "BudiiLite-primary6537AF"
+#define NETWORK_PASS "PASSWORD"
+#define HOSTSTART https://steph-rfid-quickmark.herokuapp.com
+#define HOSTEND
 
-MFRC522 mfrc522(SS_PIN, RST_PIN); // Create MFRC522 instance
+MFRC522 rfid(SS_PIN, RST_PIN); // Create MFRC522 instance
+WiFiClient client;
 
-const char* host = "www.example.com";
 int currentClassId;
-
-void setup()
-{
-	Serial.begin(9600);
-	while (!Serial);
-	SPI.begin();
-	mfrc522.PCD_Init();
-	WiFi.begin("network-name", "pass-to-network");
-	Serial.println("[Connecting to WiFi]");
-	while (WiFi.status() != WL_CONNECTED)
-	{
-		delay(500);
-		Serial.print(".");
-	}
-	Serial.println();
-
-	Serial.print("[Connected, IP address: ");
-	Serial.println(WiFi.localIP() + ']');
-
-	WiFiClient client;
-}
-
-void loop()
-{
-	if (!(client.connected())) {
-		Serial.println("[Connection Dropped with host]")
-	}
-
-}
 
 void scanForRfid()
 {
@@ -69,10 +44,22 @@ bool connectToHost(char* host, int port = 5000)
 
 	while (true)
 	{
-		client.connect(host, port)
-			? break
-			: Serial.println("[Connected failed]");
-		(c != 20) ? break : ++c;
+		if(client.connect(host, port))
+		{
+			break;
+		}
+		else
+		{
+			Serial.println("[Connected failed]");
+		}
+		if (c != 20)
+		{
+			break;
+		}
+		else
+		{
+			++c;
+		}
 		delay(1000);
 	}
 
@@ -86,9 +73,10 @@ bool connectToHost(char* host, int port = 5000)
 }
 
 
-void getClass(char *host, char* data, int port = 10000 ){
+void getClass(int port = 10000 ){
 	// Check WiFi Status
-	if (WiFi.status() == WL_CONNECTED) {
+	if (WiFi.status() == WL_CONNECTED)
+	{
 		// JSON variables
 		StaticJsonBuffer<300> JSONbuffer;
 		JsonObject& JSONencoder = JSONbuffer.createObject();
@@ -104,34 +92,76 @@ void getClass(char *host, char* data, int port = 10000 ){
 		//		"class_id": int,
 		//	},
 		//}
+		// * JSON encoding
 		JsonObject& auth = JSONencoder.createNestedObject("auth");
 		auth["id"] = DEVICE_ID;
 		auth["password"] = DEVICE_PASSWORD;
 		JsonObject& payload = JSONencoder.createNestedObject("payload");
 		payload["class_id"] = currentClassId;
-		// JSON encoding
-		// TODO: Encode object
 		JSONencoder.prettyPrintTo(JSONmessageBuffer, sizeof(JSONmessageBuffer));
 
 
-		// HTTP setup
+		// * HTTP setup
 		HTTPClient http;  //Object of class HTTPClient
-		char* url;
-		if port > 9999{
-			sprintf(url, "%s/api/get/class", host);
-		} else {
-			sprintf(url, "%s:%04d/api/get/class", host, port);
-		}
+		char* url = "https://steph-rfid-quickmark.herokuapp.com/api/get/class";
+		// if (port > 9999)
+		// {
+		// 	sprintf(url, "%s/api/get/class", host);
+		// }
+		// else
+		// {
+		// 	sprintf(url, "%s:%04d/api/get/class", host, port);
+		// }
 		http.begin(url);
 		http.addHeader("Content-Type", "application/json");
  
-		// Request and result parsing
-		int httpCode = http.POST(JSONMessegeBuffer);
-		char* payload = http.getString();
+		// * Request and result parsing
+		Serial.println("Sending object: ");
+		JSONencoder.prettyPrintTo(Serial);
+		int httpCode = http.POST(JSONmessageBuffer);
+		Serial.println("\n Data sent");
+		String output = http.getString();
+		Serial.print("Response code: ");
 		Serial.println(httpCode);   // Print HTTP return code
-		Serial.println(payload);    // Print request response payload
+		Serial.print("Response JSON");
+		Serial.println(output);    // Print request response output
 		// TODO: parse new object
  
 		http.end();   // Close connection
 	}
+}
+
+void setup()
+{
+	Serial.begin(9600);
+	while (!Serial);
+	SPI.begin();
+	rfid.PCD_Init();
+	WiFi.begin(NETWORK_NAME, NETWORK_PASS);
+	Serial.println("[Connecting to WiFi]");
+	Serial.print("[Network Name: ");
+	Serial.print(NETWORK_NAME);
+	Serial.printf("Network Pass: %s]\n", NETWORK_PASS);
+	while (WiFi.status() != WL_CONNECTED)
+	{
+		delay(500);
+		Serial.print(".");
+	}
+	Serial.println();
+
+	Serial.print("[Connected, IP address: ");
+	Serial.print(WiFi.localIP());
+	Serial.println("]");
+
+
+	getClass();
+}
+
+void loop()
+{
+	// if (!(client.connected()))
+	// {
+	// 	Serial.println("[Connection Dropped with host]");
+	// }
+
 }
