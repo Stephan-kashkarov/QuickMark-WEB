@@ -12,7 +12,7 @@
 #define DEVICE_ID 1
 #define DEVICE_PASSWORD "admin123"
 #define NETWORK_NAME "BudiiLite-primary6537AF"
-#define NETWORK_PASS "********"
+#define NETWORK_PASS "******"
 #define HOST "https://steph-rfid-quickmark.herokuapp.com"
 #define THUMBPRINT "2F 0E 48 24 F8 BA 05 3E 42 40 77 76 55 61 50 F0 2A DA 58 D2 05 FB 16 90 B8 1D A6 6D DD 76 C1 E4"
 
@@ -49,15 +49,15 @@ void getClass(int port = 10000 ){
 		char JSONmessageBuffer[300];
 
 		// * EXAMPLE JSON POST OBJECT
-		//{
-		//	"auth": {
-		//		"id": int,
-		//		"password": String,
-		//	},
-		//	"payload": {
-		//		"class_id": int,
-		//	},
-		//}
+		// {
+		// 	"auth": {
+		// 		"id": int,
+		// 		"password": String,
+		// 	},
+		// 	"payload": {
+		// 		"class_id": int,
+		// 	},
+		// }
 		// * JSON encoding
 		JsonObject& auth = JSONencoder.createNestedObject("auth");
 		auth["id"] = DEVICE_ID;
