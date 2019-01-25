@@ -55,21 +55,33 @@ void printHex(std::vector<byte> buffer, byte size)
         Serial.print(buffer[i] < 0x10 ? " 0" : " ");
         Serial.print(buffer[i], HEX);
     }
+    Serial.println();
 }
 
 bool check_equal_vector(std::vector<byte> a, std::vector<byte> b)
 {
-    // if (a.size() != b.size()) return false;
-
+    Serial.println("[System: checking equality]");
+    
+    if (a.size() != b.size()){
+        Serial.printf("[System: Size difference, A: %d, B: %d]\n", a.size(), b.size());
+        return false;
+    }
+    Serial.println("[System: Sizes where correct!]");
     for(byte i = 0; i < a.size(); ++i)
     {
-        if (a[i] != b[i]) return false;
+        Serial.printf("[System: Row %d, Byte A: %#04x, Byte B: %#04x]\n", i, a[i], b[i]);
+        if (a[i] != b[i])
+        {
+            return false;
+        }
     }
+    Serial.println("[System: Check passed]");
     return true;
 }
 
 void byte_vec_cpy(std::vector<byte> a, std::vector<byte> b)
 {
+
     b.resize(a.size());
     for (byte i = 0; i < a.size(); ++i)
     {
@@ -143,9 +155,19 @@ void loop()
         if (!check_equal_vector(prev_uid, uid)){
             Serial.println("[RFID: sending UID to server]");
             send_server(uid);
-            byte_vec_cpy(uid, prev_uid);
+            Serial.println("[RFID: copying byte vector]");
+            // byte_vec_cpy(uid, prev_uid);
+            prev_uid.resize(uid.size());
+            memcpy(&prev_uid[0], &uid[0], uid.size());
+            Serial.println("Checking size outside byte vec copy");
+            printHex(uid, uid.size());
+            printHex(prev_uid, prev_uid.size());
+            Serial.println("[RFID: Byte vector copied]");
         }
-        // memcpy(&prev_uid[0], &uid[0], uid.size());
+        else
+        {
+            Serial.println("[RFID: duplicate card]");
+        }
+        
     }
-    delay(50);
 }
