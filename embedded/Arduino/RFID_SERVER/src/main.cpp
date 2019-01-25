@@ -1,6 +1,6 @@
 /*
 RFID Server
-
+====================================================================
 Description:
  * rfid server is a program designed to be run on the node mcu v2.
  * Its purpose is to talk to a server and send across rfid uids.
@@ -13,16 +13,17 @@ Typical pin layout used:
  *             Reader/PCD   ESP8266     
  * Signal      Pin          Pin         
  * -------------------------------------
- * RST/Reset   RST          9           
- * SPI SS      SDA(SS)      10          
- * SPI MOSI    MOSI         11 / ICSP-4 
- * SPI MISO    MISO         12 / ICSP-1 
- * SPI SCK     SCK          13 / ICSP-3 
+ * RST/Reset   RST          D1        
+ * SPI SS      SDA(SS)      D2          
+ * SPI MOSI    MOSI         D7
+ * SPI MISO    MISO         D6
+ * SPI SCK     SCK          D5
 
 Credits:
  * Written by Stephan kashkarov
  * In January, 2019
  * source: https://github.com/Stephan-kashkarov/QuickMark-RIFD/blob/master/embedded/Arduino/RFID_SERVER/src/main.cpp
+
 */
 
 // Lib lnclude
