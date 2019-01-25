@@ -50,6 +50,9 @@ MFRC522 rfid(SS_PIN, RST_PIN);
 
 // General functions
 void printHex(std::vector<byte> buffer, byte size)
+/*
+    Prints out byte vector in hex
+*/
 {
     for (byte i = 0; i < size; i++)
     {
@@ -60,6 +63,9 @@ void printHex(std::vector<byte> buffer, byte size)
 }
 
 bool check_equal_vector(std::vector<byte> a, std::vector<byte> b)
+/*
+    Checks for equality between two byte vectors
+*/
 {
     Serial.println("[System: checking equality]");
     
@@ -78,19 +84,6 @@ bool check_equal_vector(std::vector<byte> a, std::vector<byte> b)
     }
     Serial.println("[System: Check passed]");
     return true;
-}
-
-void byte_vec_cpy(std::vector<byte> a, std::vector<byte> b)
-{
-
-    b.resize(a.size());
-    for (byte i = 0; i < a.size(); ++i)
-    {
-        b[i] = a[i];
-    }
-    printHex(a, a.size());
-    Serial.print("\n");
-    printHex(b, b.size());
 }
 
 // WiFi functions
