@@ -5,7 +5,6 @@ Description:
  * Its purpose is to talk to a server and send across rfid uids.
  * This was made to create a marking system for school teacher with
  * rfid enabled student ids. This will make marking really quick.
-
 Typical pin layout used:
  * -------------------------------------
  *             MFRC522      Expressif   
@@ -17,12 +16,10 @@ Typical pin layout used:
  * SPI MOSI    MOSI         11 / ICSP-4 
  * SPI MISO    MISO         12 / ICSP-1 
  * SPI SCK     SCK          13 / ICSP-3 
-
 Credits:
  * Written by Stephan kashkarov
  * In January, 2019
  * source: https://github.com/Stephan-kashkarov/QuickMark-RIFD/blob/master/embedded/Arduino/RFID_SERVER/src/main.cpp
-
 */
 #include <SPI.h>
 #include <MFRC522.h>
@@ -30,8 +27,8 @@ Credits:
 #include <ESP8266WiFi.h>
 
 // Static defines
-#define RST_PIN 9
-#define SS_PIN 10
+#define RST_PIN 5
+#define SS_PIN  4
 
 // Variables
 byte* uid;
