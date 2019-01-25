@@ -144,8 +144,6 @@ void loop()
     if (card_present())
     {
         card_get_uid(uid);
-        printHex(uid, uid.size());
-        printHex(prev_uid, prev_uid.size());
         if (!check_equal_vector(prev_uid, uid)){
             Serial.println("[RFID: sending UID to server]");
             send_server(uid);
@@ -153,9 +151,6 @@ void loop()
             // byte_vec_cpy(uid, prev_uid);
             prev_uid.resize(uid.size());
             memcpy(&prev_uid[0], &uid[0], uid.size());
-            Serial.println("Checking size outside byte vec copy");
-            printHex(uid, uid.size());
-            printHex(prev_uid, prev_uid.size());
             Serial.println("[RFID: Byte vector copied]");
         }
         else
