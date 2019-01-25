@@ -64,12 +64,13 @@ byte* card_get_uid()
 {
     Serial.println("[RFID: Getting UID]");
     MFRC522::Uid uidObj = rfid.uid;
-    Serial.printf("[RFID: Uid is: ", uid);
+    Serial.print("[RFID: Uid is: ");
     for (byte i = 0; i < uidObj.size; i++)
     {
         Serial.print(uidObj.uidByte[i] < 0x10 ? " 0" : " ");
         Serial.print(uidObj.uidByte[i], HEX);
     }
+    Serial.println("]");
     return rfid.uid.uidByte;
 }
 
@@ -84,7 +85,7 @@ void send_server(byte* uid)
 // Main functions
 void setup()
 {
-    Serial.begin(11520);
+    Serial.begin(9600);
     while (!Serial);
 	SPI.begin();
 	rfid.PCD_Init();
