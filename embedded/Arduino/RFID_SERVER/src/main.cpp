@@ -32,6 +32,8 @@ Credits:
 #include <MFRC522.h>
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
+#include <ArduinoJson.h>
+#include <ESP8266HTTPClient.h>
 
 
 // Static defines
@@ -39,12 +41,19 @@ Credits:
 #define SS_PIN  4
 
 // Variables
+int loops;
 std::vector<byte> uid;
 std::vector<byte> prev_uid;
+
+// JSON variables
+const byte id = 0;
+const char* key = "******";
+const int capacity = 3*JSON_OBJECT_SIZE(2);
+
+// Wifi & server variables
 const char* ssid = "BudiiLite-primary6537AF";
 const char* password = "********";
 const char* host = "";
-int loops;
 
 // Class init
 MFRC522 rfid(SS_PIN, RST_PIN);
@@ -58,10 +67,19 @@ void printHex(std::vector<byte> buffer, byte size)
 {
     for (byte i = 0; i < size; i++)
     {
-        Serial.print(buffer[i] < 0x10 ? " 0" : " ");
-        Serial.print(buffer[i], HEX);
+        
     }
-    Serial.println();
+}
+
+std::string serialize_uid(std::vector<byte> buffer)
+{
+    std::string flat_buffer;
+    for (byte i = 0; i < buffer.size(); i++)
+    {
+        flat_buffer.append(buffer[i] < 0x10 ? " 0" : " ");
+        flat_buffer.append(buffer[i], HEX);
+    }
+    return flat_buffer;
 }
 
 bool check_equal_vector(std::vector<byte> a, std::vector<byte> b)
@@ -81,6 +99,8 @@ bool check_equal_vector(std::vector<byte> a, std::vector<byte> b)
         Serial.printf("[System: Row %d, Byte A: %#04x, Byte B: %#04x]\n", i, a[i], b[i]);
         if (a[i] != b[i])
         {
+            Serial.printf("[System: Row %d didn't match!]\n", i);
+            Serial.println("[System: Check failed!]");
             return false;
         }
     }
@@ -138,9 +158,58 @@ void card_get_uid(std::vector<byte>& uuid)
 
 
 // Server Functions
+JsonObject& create_json_obj(std::string* uid)
+{
+    /*
+        Example json object:
+        {
+            "auth": {
+                "id": "",
+                "key": "",
+            },
+            "payload": {
+                uid: "",
+            },
+        }
+    */
+    StaticJsonBuffer<capacity> jb;
+    Serial.println("[JSON: Creating json object]");
+    JsonObject& root = jb.createObject();
+    JsonObject& autho = root.createNestedObject("auth");
+    autho["id"] = id;
+    autho["key"] = key;
+    JsonObject& data = root.createNestedObject("payload");
+    data["uid"] = uid->c_str();
+    Serial.println("[JSON: Json object created (see below)]");
+    root.prettyPrintTo(Serial);
+    Serial.println();
+    return root;
+}
+
+JsonObject& update_json_with(std::vector<byte> uuid)
+{
+    Serial.print("[JSON: updating json with uuid: ");
+    printHex(uuid, uuid.size());
+    Serial.println("]");
+    std::string flat_uid = serialize_uid(uuid);
+    Serial.printf("[JSON: Serialized UID: %s]\n", flat_uid.c_str());
+    return create_json_obj(&flat_uid);
+
+}
+
+bool send_http_json(JsonObject& jsonb)
+{
+    return true;
+}
+
 void send_server(std::vector<byte> uuid)
 {
-
+    JsonObject& json = update_json_with(uuid);
+    byte counter = 1;
+    while (!send_http_json(json))
+    {
+        if (counter == 20) break;
+    }
 }
 
 
@@ -160,6 +229,9 @@ void loop()
     if (card_present())
     {
         card_get_uid(uid);
+        Serial.print("[RFID: Uid found: ");
+        printHex(uid, uid.size());
+        Serial.println("]");
         if (!check_equal_vector(prev_uid, uid)){
             Serial.println("[RFID: sending UID to server]");
             send_server(uid);
@@ -178,8 +250,9 @@ void loop()
     }
     // clears prev_uid var
     ++loops;
-    if (loops%100)
+    if (loops%50 == 0)
     {
+        Serial.println("[System: prev_uid timeout, clearing]");
         prev_uid.clear();
     }
     delay(50);
