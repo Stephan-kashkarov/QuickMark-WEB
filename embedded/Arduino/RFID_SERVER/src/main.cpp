@@ -28,10 +28,10 @@ Credits:
 
 // Lib lnclude
 #include <SPI.h>
+#include <stdio.h>
 #include <MFRC522.h>
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
-#include <stdio.h>
 
 
 // Static defines
@@ -41,8 +41,10 @@ Credits:
 // Variables
 std::vector<byte> uid;
 std::vector<byte> prev_uid;
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "BudiiLite-primary6537AF";
+const char* password = "********";
+const char* host = "";
+int loops;
 
 // Class init
 MFRC522 rfid(SS_PIN, RST_PIN);
@@ -89,6 +91,20 @@ bool check_equal_vector(std::vector<byte> a, std::vector<byte> b)
 // WiFi functions
 void wifi_init(const char* ssid, const char* password)
 {
+
+    WiFi.begin(ssid, password);
+
+    Serial.print("[WiFi: Connecting");
+    while (WiFi.status() != WL_CONNECTED)
+    {
+        delay(500);
+        Serial.print(".");
+    }
+    Serial.println("]");
+
+    Serial.print("[WiFi: Connected, IP address: ");
+    Serial.print(WiFi.localIP());
+    Serial.println("]");
 
 }
 
@@ -152,6 +168,7 @@ void loop()
             prev_uid.resize(uid.size());
             memcpy(&prev_uid[0], &uid[0], uid.size());
             Serial.println("[RFID: Byte vector copied]");
+            loops = 0;
         }
         else
         {
@@ -159,4 +176,11 @@ void loop()
         }
         
     }
+    // clears prev_uid var
+    ++loops;
+    if (loops%100)
+    {
+        prev_uid.clear();
+    }
+    delay(50);
 }
