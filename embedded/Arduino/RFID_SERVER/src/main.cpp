@@ -31,6 +31,7 @@ Credits:
 // C++ libs
 #include <stdio.h>
 
+
 // Arduino libs
 #include <SPI.h>
 #include <MFRC522.h>
@@ -57,7 +58,7 @@ const int capacity = 3*JSON_OBJECT_SIZE(2);
 
 // Wifi & server variables
 const char* ssid = "BudiiLite-primary6537AF";
-const char* password = "******";
+const char* password = "********";
 const char* host = "";
 
 // Class init
@@ -80,17 +81,11 @@ void printHex(std::vector<byte> buffer, byte size)
 unsigned long serialize_uid(std::vector<byte> buffer)
 {
     unsigned long uid_val = 0;
-    unsigned long shifted_val = 0;
     for (byte i = 0; i < buffer.size(); ++i)
     {
-        Serial.printf("[DEBUG: shifting %d by %d on iteration %d]\n", buffer[i], (i - 1) * 8, i);
-        shifted_val = buffer[i] << (i - 1) * 8;
-        Serial.printf("[DEBUG: adding %lu to %lu]\n", shifted_val, uid_val);
-        uid_val = uid_val | shifted_val;
-        Serial.printf("[DEBUG: result, %lu]\n", uid_val);
-        shifted_val = 0;
+        unsigned long shifted_val = static_cast<unsigned long>(buffer[i]) & 0xff;
+        uid_val += shifted_val << (3 - i) * 8;
     }
-    Serial.printf("[DEBUG: number is %lu and in hex it's %#10lx]\n", uid_val, uid_val);
     return uid_val;
 }
 
@@ -187,11 +182,11 @@ JsonObject& create_json_obj(unsigned long* uid)
     StaticJsonBuffer<capacity> jb;
     Serial.println("[JSON: Creating json object]");
     JsonObject& root = jb.createObject();
-    JsonObject& autho = root.createNestedObject("auth");
-    autho["id"] = id;
-    autho["key"] = key;
+    JsonObject& auth = root.createNestedObject("auth");
+    auth["id"] = id;
+    auth["key"] = key;
     JsonObject& data = root.createNestedObject("payload");
-    data["uid"] = uid;
+    data.set("uid", *uid);
     Serial.println("[JSON: Json object created (see below)]");
     root.prettyPrintTo(Serial);
     Serial.println();
