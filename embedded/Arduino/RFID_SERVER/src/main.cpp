@@ -25,14 +25,19 @@ Credits:
  * source: https://github.com/Stephan-kashkarov/QuickMark-RIFD/blob/master/embedded/Arduino/RFID_SERVER/src/main.cpp
 
 */
-
-// Lib lnclude
-#include <SPI.h>
-#include <stdio.h>
-#include <MFRC522.h>
+// base libs
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
+
+// C++ libs
+#include <stdio.h>
+
+// Arduino libs
+#include <SPI.h>
+#include <MFRC522.h>
 #include <ArduinoJson.h>
+
+// ESP libs
+#include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
 
@@ -41,7 +46,7 @@ Credits:
 #define SS_PIN  4
 
 // Variables
-int loops;
+byte loops;
 std::vector<byte> uid;
 std::vector<byte> prev_uid;
 
@@ -52,7 +57,7 @@ const int capacity = 3*JSON_OBJECT_SIZE(2);
 
 // Wifi & server variables
 const char* ssid = "BudiiLite-primary6537AF";
-const char* password = "********";
+const char* password = "******";
 const char* host = "";
 
 // Class init
@@ -67,19 +72,26 @@ void printHex(std::vector<byte> buffer, byte size)
 {
     for (byte i = 0; i < size; i++)
     {
-        
+        Serial.print(buffer[i] < 0x10 ? "0" : "");
+        Serial.print(buffer[i], HEX);
     }
 }
 
-std::string serialize_uid(std::vector<byte> buffer)
+unsigned long serialize_uid(std::vector<byte> buffer)
 {
-    std::string flat_buffer;
-    for (byte i = 0; i < buffer.size(); i++)
+    unsigned long uid_val = 0;
+    unsigned long shifted_val = 0;
+    for (byte i = 0; i < buffer.size(); ++i)
     {
-        flat_buffer.append(buffer[i] < 0x10 ? " 0" : " ");
-        flat_buffer.append(buffer[i], HEX);
+        Serial.printf("[DEBUG: shifting %d by %d on iteration %d]\n", buffer[i], (i - 1) * 8, i);
+        shifted_val = buffer[i] << (i - 1) * 8;
+        Serial.printf("[DEBUG: adding %lu to %lu]\n", shifted_val, uid_val);
+        uid_val = uid_val | shifted_val;
+        Serial.printf("[DEBUG: result, %lu]\n", uid_val);
+        shifted_val = 0;
     }
-    return flat_buffer;
+    Serial.printf("[DEBUG: number is %lu and in hex it's %#10lx]\n", uid_val, uid_val);
+    return uid_val;
 }
 
 bool check_equal_vector(std::vector<byte> a, std::vector<byte> b)
@@ -158,7 +170,7 @@ void card_get_uid(std::vector<byte>& uuid)
 
 
 // Server Functions
-JsonObject& create_json_obj(std::string* uid)
+JsonObject& create_json_obj(unsigned long* uid)
 {
     /*
         Example json object:
@@ -179,7 +191,7 @@ JsonObject& create_json_obj(std::string* uid)
     autho["id"] = id;
     autho["key"] = key;
     JsonObject& data = root.createNestedObject("payload");
-    data["uid"] = uid->c_str();
+    data["uid"] = uid;
     Serial.println("[JSON: Json object created (see below)]");
     root.prettyPrintTo(Serial);
     Serial.println();
@@ -191,8 +203,8 @@ JsonObject& update_json_with(std::vector<byte> uuid)
     Serial.print("[JSON: updating json with uuid: ");
     printHex(uuid, uuid.size());
     Serial.println("]");
-    std::string flat_uid = serialize_uid(uuid);
-    Serial.printf("[JSON: Serialized UID: %s]\n", flat_uid.c_str());
+    unsigned long flat_uid = serialize_uid(uuid);
+    Serial.printf("[JSON: Serialized UID: %lu]\n", flat_uid);
     return create_json_obj(&flat_uid);
 
 }
@@ -231,7 +243,7 @@ void loop()
         card_get_uid(uid);
         Serial.print("[RFID: Uid found: ");
         printHex(uid, uid.size());
-        Serial.println("]");
+        Serial.printf(" of size %d]\n", uid.size());
         if (!check_equal_vector(prev_uid, uid)){
             Serial.println("[RFID: sending UID to server]");
             send_server(uid);
@@ -250,10 +262,11 @@ void loop()
     }
     // clears prev_uid var
     ++loops;
-    if (loops%50 == 0)
+    if (loops%5 == 0)
     {
         Serial.println("[System: prev_uid timeout, clearing]");
         prev_uid.clear();
+        loops = 0;
     }
-    delay(50);
+    delay(1000);
 }
