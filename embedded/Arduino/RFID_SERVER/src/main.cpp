@@ -58,11 +58,12 @@ const int capacity = 3*JSON_OBJECT_SIZE(2);
 
 // Wifi & server variables
 const char* ssid = "BudiiLite-primary6537AF";
-const char* password = "********";
-const char* host = "";
+const char* password = "*********";
+const char* host = "https://steph-rfid-quickmark.herokuapp.com/";
 
 // Class init
 MFRC522 rfid(SS_PIN, RST_PIN);
+HTTPClient http;
 
 
 // General functions
@@ -206,6 +207,22 @@ JsonObject& update_json_with(std::vector<byte> uuid)
 
 bool send_http_json(JsonObject& jsonb)
 {
+
+    Serial.println("[HTTP: Beginning HTTP request]");
+
+    http.begin(host);
+    http.addHeader("Content-Type", "application/json");
+
+    Serial.println("[JSON: Serializing data]");
+
+    char json_serialized[240];
+    jsonb.prettyPrintTo(json_serialized);
+
+    Serial.println("[HTTP: Posting JSON string]");
+
+    int code = http.POST(json_serialized);
+
+    Serial.printf("[HTTP: Request send with code: %d]\n", code);
     return true;
 }
 
