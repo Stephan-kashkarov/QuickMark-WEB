@@ -9,8 +9,18 @@ from flask import (
     request,
     url_for
 )
+from flask_login import (
+    login_required,
+    login_user,
+    logout_user,
+    current_user
+)
 
-from server.app import app, db
+from server.app import (
+    app,
+    db
+)
+
 from server.app.models import (
     Class,
     Class_Student,
@@ -23,14 +33,49 @@ from server.app.models import (
 
 from datetime import datetime
 
+# Auth stuff
 
+@app.route("/api/auth/login", methods=["POST"])
+def login():
+    if request.is_json():
+        data = request.get_json()
+        user = Person.query.filter_by(username=data['username']).first_or_404()
+        if user.check_password(data['password']):
+            login_user(user)
+            return 'Login successful'
+        return "Login unsuccsessful - incorrect password"
+    return "Login unsuccsessful - No user found"
+
+@app.route("/api/auth/register", methods=["POST"])
+def register():
+    if request.is_json():
+        data = request.get_json()
+        if not Person.query.filter_by(username=data['username']):
+            user = Person()
+            user.username = data['username']
+            user.email = data['email']
+            user.set_password(data['password'])
+            db.session.add(user)
+            db.session.commit()
+            return "Registration Succsesful - try logging in"
+        return "Registration unsuccsesful - User already exists"
+    return "Registration unsuccsesful - data 404"
+
+@login_required
+@app.route("/api/auth/logout", methods=["POST"])
+def logout():
+    logout_user(current_user)
+    return "Logout Succsesful"
+
+
+# RFID stuff
 def authStation(s_id, password):
     station = RFIDStation.query.get_or_404(int(s_id))
     if station and station.check_password(password):
         return station
     return False
 
-@app.route("/api", methods=["POST"])
+@app.route("/api/rfid", methods=["POST"])
 def API():
     data = request.get_json()
     if data:
