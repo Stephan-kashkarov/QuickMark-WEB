@@ -1,130 +1,63 @@
 $(function(){
-	$(".register-form").hide()
-	$(".nav-tabs .nav-item").on('click', function (e) {
+	$(".steph-register").hide()
+
+
+	$(".nav-link").on('click', function (e) {
 		e.preventDefault()
-		if (!($(this).hasClass("active"))){
-			$(".nav-tabs .active").removeClass("active")
-			$(this).addClass("active")
-			switch ($(this).text()) {
+		$(".active").removeClass("active")
+		$(this).addClass("active")
 
-				case "Login":
+		let tab = $(this).text()
+		switch (tab) {
+			case "Login":
+				$(".steph-register").hide()
+				$(".steph-login").show()
+				break;
 
-					$(".register-form").animateCss("bounceOutRight", function () {
-						$(".register-form").hide()
-						$(".login-form").show()
-						$(".login-form").animateCss("bounceInLeft")
-					})
-					break
-				
-				case "Register":
-					$(".login-form").animateCss("bounceOutLeft", function () {
-						$(".login-form").hide()
-						$(".register-form").show()
-						$(".register-form").animateCss("bounceInRight")
-					})
-					break
-				
-				default:
-					break
-			}
+			case "Register":
+				$(".steph-login").hide()
+				$(".steph-register").show()
+				break;
+
+			default:
+				break;
 		}
 	})
 
-	$(".login-submit").on('click', async (e) => {
+	$(".login-btn").on("click", async function (e) {
 		e.preventDefault()
-		formData = {
-			"type": "login",
-			'username': $("#username").val(),
-			'passowrd': $("#password").val(),
-			"remember": $("#remember").val()
-		}
-		$.ajax({
-			url: window.location,
-			method: "POST",
-			data: JSON.stringify(formData),
-			contentType: "application/json charset=utf-8",
-			dataType: "json"
-		}).fail((err) => { // Successful Ajax Post always returns fail so i just did this
-			switch (err.responseText) {
-				case "No User":
-					console.log(err.responseText)
-					$("#username").addClass(".is-invalid")
-					setTimeout( () => {
-						$("#username").removeClass(".is-invalid")
-					}, 2000)
-					break
+		let resp = $.ajax({
+			type: "POST",
+			url: "/api/auth/login",
+			dataType: "json",
+			data: {
+				username: $(".login-user").val(),
+				password: $(".login-pass").val(),
+				remember: $(".login-chck").val(),
+			},
+			success: function (msg) {
+				console.log("Hello!");
+				
+				
+			},
+		}).fail(function (resp) {
+			console.log("Hello!")
+			console.log(resp.status, resp.responseText)
+			if (resp.status == 200) {
+				$.notify({
+					title: 'Login',
+					messege: resp.responseText,
+				}, {
+					type: 'info',
+					animate: {
+						enter: 'animated fadeInDown',
+						exit: 'animated fadeOutUp'
+					},
+					allow_dismiss: true,
+				})
 
-				case "Incorrect login":
-					console.log(err.responseText)
-					$("#username").addClass(".is-valid")
-					$("#password").addClass(".is-invalid")
-					setTimeout(() => {
-						$("#username").removeClass(".is-valid")
-					}, 2000)
-					setTimeout(() => {
-						$("#password").removeClass(".is-invalid")
-					}, 2000)
-					break
-
-				case "Success":
-					console.log(err.responseText)
-					$("#username").addClass(".is-valid")
-					$("#password").addClass(".is-valid")
-					setTimeout(() => {
-						$("#username").removeClass(".is-valid")
-					}, 2000)
-					setTimeout(() => {
-						$("#password").removeClass(".is-valid")
-					}, 2000)
-					window.location.href = "../dash"
-					break
-
-				default:
-					console.log(err.responseText)
-					break
 			}
 		})
-	})
-
-	$(".register-submit").on('click', async (e) => {
-		e.preventDefault()
-
-		console.log("Regestering user")
 		
-
-		var user, email, pass = [false, false, false]
-
-		var formData = {
-			"type": "register",
-			"username": $("#register-username").val(),
-			"email": $("#register-email").val(),
-			"password": $("#register-pass1").val(),
-			"passCheck": $("#register-pass2").val()
-		}
-		console.log(formData)
-		if (formData["password"] === formData["passCheck"]){
-			pass = true
-		}
-		if (/(.+)@(.+){2,}\.(.+){2,}/.test(formData["email"])){
-			email = true
-		}
-		if (formData['username'].length >= 3){
-			user = true
-		}
-
-		console.log({user, email, pass})
-
-		if (user && email && pass)  {
-			$.ajax({
-				url: window.location,
-				method: "POST",
-				data: JSON.stringify(formData),
-				contentType: "application/json charset=utf-8",
-				dataType: "json"
-			}).fail( (err) => {
-				console.log(err)
-				console.log(err.responseText)
-			})
-		}
 	})
 })

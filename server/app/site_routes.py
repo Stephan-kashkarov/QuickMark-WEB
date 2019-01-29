@@ -8,6 +8,10 @@ from flask_login import current_user, login_user, login_required, logout_user
 def index():
 	return render_template("body.html")
 
+@app.route("/auth")
+def auth():
+	return render_template("auth.html")
+
 @login_required
 @app.route("/dash")
 def dash():

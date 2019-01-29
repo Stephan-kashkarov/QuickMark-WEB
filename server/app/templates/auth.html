@@ -3,74 +3,46 @@
 {% block scripts %}
 <script src="{{url_for('.static', filename='js/auth.js')}}"></script>
 {% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('.static', filename='css/auth.css')}}">
+{% endblock %}
+
 {% block body %}
-<div class="jumbotron">
-	<h1 class="display-4">Welcome!</h1>
-	<p class="lead">
-		If you already have an account please login below. Otherwise register for this service below
-	</p>
-	<hr class="my-4">
-	<nav class="nav nav-pills nav-justified nav-tabs">
-		<a class="nav-item nav-link active" href="#">Login</a>
-		<a class="nav-item nav-link" href="#">Register</a>
-	</nav>
-	<div class="login-form">
-		<form class="needs-validation">
+<div class="container">
+	<div class="notifs">
+
+	</div>
+	<h1>Welcome</h1>
+	<p>Please login or register below</p>
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link active" href="">Login</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="">Register</a>
+		</li>
+	</ul>
+	<div class="steph-login">
+		<form>
 			<div class="form-group">
-				<label for="username">Username</label>
-				<input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder="Enter Username">
+				<label for="login_username">Username or Email address</label>
+				<input type="email" class="form-control" id="login_username" aria-describedby="emailHelp" placeholder="Enter username or email">
+				<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
 			</div>
 			<div class="form-group">
-				<label for="password">Password</label>
-				<input type="password" class="form-control" id="password" placeholder="Password">
+				<label for="login_password">Password</label>
+				<input type="password" class="form-control" id="login_password" placeholder="Password">
 			</div>
 			<div class="form-group form-check">
-				<input type="checkbox" class="form-check-input" id="remember">
-				<label class="form-check-label" for="remember">Remeber me</label>
+				<input type="checkbox" class="form-check-input" id="remember_me">
+				<label class="form-check-label" for="remember_me">Remember me</label>
 			</div>
-			<button type="submit" class="btn btn-primary login-submit">Login</button>
+			<button type="submit" class="btn btn-primary login-btn">Submit</button>
 		</form>
 	</div>
-	<div class="register-form">
-		<form class="needs-validation">
-			<div class="form-group">
-				<label for="register-username">Username</label>
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<span class="input-group-text" id="inputGroupPrepend3">@</span>
-					</div>
-					<input type="text" class="form-control" id="register-username" placeholder="Enter a username"
-					aria-describedby="inputGroupPrepend3" required>
-					<div class="invalid-feedback">
-						Useraname taken or empty
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="register-email">Email (Optional | Notifications)</label>
-				<div class="input-group">
-					<input type="text" class="form-control" id="register-email" placeholder="Enter an email">
-					<div class="invalid-feedback">
-						Email taken, invalid or empty
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="register-pass1">Password</label>
-				<input type="password" class="form-control" id="register-pass1" placeholder="Enter a passoword" required>
-				<div class="invalid-feedback">
-					Passoword empty
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="register-pass2">Confirm Password</label>
-				<input type="password" class="form-control" id="register-pass2" placeholder="Re-type your password" required>
-				<div class="invalid-feedback">
-					Passoword dosent match
-				</div>
-			</div>
-			<button type="submit" class="btn btn-primary register-submit">Create new account</button>
-		</form>
+	<div class="steph-register">
+		
 	</div>
 </div>
 {% endblock %}
