@@ -1,6 +1,5 @@
 .banner{
-    width:80%;
-    height:500px;
-    background-color:blue;
+    width:100% !important;
+    text-align:center;
 
 }
