@@ -36,9 +36,11 @@ from datetime import datetime
 # Auth stuff
 @app.route("/api/auth/login", methods=["POST"])
 def login():
-    if request.is_json():
+    if request.is_json:
         data = request.get_json()
-        user = Person.query.filter_by(username=data['username']).first_or_404()
+        user = Person.query.filter_by(username=data['username']).first()
+        if not user:
+            user = Person.query.filter_by(email=data['username']).first_or_404()
         if user.check_password(data['password']):
             login_user(user)
             return 'Login successful'
@@ -47,7 +49,7 @@ def login():
 
 @app.route("/api/auth/register", methods=["POST"])
 def register():
-    if request.is_json():
+    if request.is_json:
         data = request.get_json()
         if not Person.query.filter_by(username=data['username']):
             user = Person()
@@ -88,7 +90,5 @@ def rfid():
             marking_instance.marked_at = datetime.now()
 
             return "Operation succsessful"
-
-
         return "Invalid auth details"
     return "No Json"
