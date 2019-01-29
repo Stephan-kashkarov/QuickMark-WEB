@@ -51,3 +51,9 @@ input .is-invalid {
 	height:50px;
 	padding:10px;
 }
+
+.bar{
+	width:1px !important;
+	background-color:black;
+	margin-right:10px;
+}
