@@ -44,3 +44,9 @@ input .is-valid {
 input .is-invalid {
 	border-color: #dc3545 !important;
 }
+
+.logo{
+	width:150px;
+	height:50px;
+	padding:10px;
+}
