@@ -23,7 +23,6 @@ $(function(){
 				break;
 		}
 	})
-
 	$(".login-btn").on("click", function (e) {
 		e.preventDefault()
 		$.ajax({
@@ -34,11 +33,6 @@ $(function(){
 				username: $(".login-user").val(),
 				password: $(".login-pass").val(),
 				remember: $(".login-chck").val(),
-			},
-			success: function (msg) {
-				console.log("Hello!");
-				
-				
 			},
 		}).fail(function (resp) {
 			if (resp.status == 200) {
@@ -66,5 +60,26 @@ $(function(){
 				})
 			}
 		})
+	})
+
+	$(".register-btn").on('click', function(e){
+		e.preventDefault()
+		
+		if (check_password() && check_username()){
+			$.ajax({
+				type: "POST",
+				url: "/api/auth/register",
+				dataType: "json",
+				data: {
+					username: $(".register-username").val(),
+					password: $(".register-password").val(),
+					email: $(".register-email").val(),
+				},
+			}).fail(function(resp){
+	
+			})
+		} else {
+			
+		}
 	})
 })
