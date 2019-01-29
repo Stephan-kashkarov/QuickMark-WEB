@@ -11,4 +11,5 @@ def index():
 @login_required
 @app.route("/dash")
 def dash():
-	return "Not done yet"
+	return render_template("dash.html")
+
