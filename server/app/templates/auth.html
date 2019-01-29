@@ -1,18 +1,15 @@
 {% extends 'main.html' %}
 
-{% block scripts %}
-<script src="{{url_for('.static', filename='js/auth.js')}}"></script>
-{% endblock %}
-
 {% block styles %}
 <link rel="stylesheet" href="{{url_for('.static', filename='css/auth.css')}}">
 {% endblock %}
 
+{% block scripts %}
+<script src="{{url_for('.static', filename='js/auth.js')}}"></script>
+{% endblock %}
+
 {% block body %}
 <div class="container">
-	<div class="notifs">
-
-	</div>
 	<h1>Welcome</h1>
 	<p>Please login or register below</p>
 	<ul class="nav nav-tabs">
@@ -42,7 +39,28 @@
 		</form>
 	</div>
 	<div class="steph-register">
-		
+		<form>
+			<div class="form-group">
+				<label for="register_username">Username</label>
+				<input type="email" class="form-control" id="register_username" placeholder="Enter username">
+			</div>
+			<div class="form-group">
+				<label for="register_email">Email address</label>
+				<input type="email" class="form-control" id="register_email" aria-describedby="emailHelp" placeholder="Enter email">
+				<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="register_password">Password</label>
+					<input type="email" class="form-control" id="register_password" placeholder="Email">
+				</div>
+				<div class="form-group col-md-6">
+					<label for="register_password2">Confirm Password</label>
+					<input type="password" class="form-control" id="register_password2" placeholder="Re-Type Password">
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary register-btn">Submit</button>
+		</form>
 	</div>
 </div>
 {% endblock %}

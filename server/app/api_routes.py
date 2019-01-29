@@ -43,7 +43,7 @@ def login():
             user = Person.query.filter_by(email=data['username']).first_or_404()
         if user.check_password(data['password']):
             login_user(user)
-            return 'Login successful'
+            return 'Login successful', 201
         return "Login unsuccsessful - incorrect password"
     return "Login unsuccsessful - No user found"
 

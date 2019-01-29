@@ -7,7 +7,7 @@ $(function(){
 		$(".active").removeClass("active")
 		$(this).addClass("active")
 
-		let tab = $(this).text()
+		var tab = $(this).text()
 		switch (tab) {
 			case "Login":
 				$(".steph-register").hide()
@@ -24,9 +24,9 @@ $(function(){
 		}
 	})
 
-	$(".login-btn").on("click", async function (e) {
+	$(".login-btn").on("click", function (e) {
 		e.preventDefault()
-		let resp = $.ajax({
+		$.ajax({
 			type: "POST",
 			url: "/api/auth/login",
 			dataType: "json",
@@ -41,23 +41,30 @@ $(function(){
 				
 			},
 		}).fail(function (resp) {
-			console.log("Hello!")
-			console.log(resp.status, resp.responseText)
 			if (resp.status == 200) {
 				$.notify({
-					title: 'Login',
-					messege: resp.responseText,
+					message: resp.responseText,
 				}, {
-					type: 'info',
+					type: 'danger',
 					animate: {
 						enter: 'animated fadeInDown',
 						exit: 'animated fadeOutUp'
 					},
 					allow_dismiss: true,
 				})
-
+			} else if (resp.status == 201){
+				$.notify({
+					title: 'Login | ',
+					message: "Succeeded",
+				}, {
+					type: 'success',
+					animate: {
+						enter: 'animated fadeInDown',
+						exit: 'animated fadeOutUp'
+					},
+					allow_dismiss: true,
+				})
 			}
 		})
-		
 	})
 })
