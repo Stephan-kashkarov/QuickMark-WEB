@@ -18,10 +18,10 @@ class Access(db.Model):
 class Roll_Student(db.Model):
 	__tablename__ = "roll_student"
 	extend_existing = True
-	roll_id = db.Column(db.Integer, db.ForeignKey("roll.id"), primary_key=True)
+	roll_id =    db.Column(db.Integer, db.ForeignKey("roll.id"), primary_key=True)
 	student_id = db.Column(db.Integer, db.ForeignKey("student.id"), primary_key=True)
-	present = db.Column(db.Boolean, default=False)
-	marked_at = db.Column(db.DateTime, default=None)
+	present =    db.Column(db.Boolean, default=False)
+	marked_at =  db.Column(db.DateTime, default=None)
 
 class Class_Student(db.Model):
 	__tablename__ = "class_student"
@@ -49,6 +49,7 @@ class Roll(db.Model):
 	date =     db.Column(db.Date, default=date.today())
 	class_id = db.Column(db.Integer)
 	roll =     db.relationship("Roll_Student", backref="roll", lazy="dynamic")
+	linked_rfid = db.relationship("RFIDStation", back_populates="linked_roll")
 
 	def __repr__(self):
 		return "<Roll object Student: {} is in Class: {}>".format(self.student_id, self.class_id)
@@ -94,6 +95,8 @@ class RFIDStation(db.Model):
 	id =            db.Column(db.Integer, primary_key=True)
 	name =          db.Column(db.String(64))
 	password_hash = db.Column(db.String(128))
+	linked_roll =   db.Column(db.Integer, db.ForeignKey('roll.id'))
+	parent =        db.relationship("Roll", back_populates="linked_rfid")
 
 	def __repr__(self):
 		return '<Station {}>'.format(self.name)
