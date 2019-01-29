@@ -42,18 +42,6 @@ class Class(db.Model):
 	def __repr__(self):
 		return "<Class: {}>".format(self.title)
 
-class Roll(db.Model):
-	__tablename__ = "roll"
-
-	id =       db.Column(db.Integer, primary_key=True)
-	date =     db.Column(db.Date, default=date.today())
-	class_id = db.Column(db.Integer)
-	roll =     db.relationship("Roll_Student", backref="roll", lazy="dynamic")
-	linked_rfid = db.relationship("RFIDStation", back_populates="linked_roll")
-
-	def __repr__(self):
-		return "<Roll object Student: {} is in Class: {}>".format(self.student_id, self.class_id)
-
 
 class Student(db.Model):
 	__tablename__ = "student"
@@ -67,6 +55,18 @@ class Student(db.Model):
 	def __repr__(self):
 		return "<Student, id: {}, name: {}, dbId: {}>".format(self.student_id, self.student_name, self.id)
 
+
+class Roll(db.Model):
+	__tablename__ = "roll"
+
+	id =       db.Column(db.Integer, primary_key=True)
+	date =     db.Column(db.Date, default=date.today())
+	class_id = db.Column(db.Integer)
+	roll =     db.relationship("Roll_Student", backref="roll", lazy="dynamic")
+	linked_rfid = db.relationship("RFIDStation", back_populates="linked_roll_rel")
+
+	def __repr__(self):
+		return "<Roll object Student: {} is in Class: {}>".format(self.student_id, self.class_id)
 
 # USER TABLES
 class Person(db.Model, UserMixin):
@@ -92,11 +92,11 @@ class Person(db.Model, UserMixin):
 
 class RFIDStation(db.Model):
 	__tablename__ = "rfid_station"
-	id =            db.Column(db.Integer, primary_key=True)
-	name =          db.Column(db.String(64))
-	password_hash = db.Column(db.String(128))
-	linked_roll =   db.Column(db.Integer, db.ForeignKey('roll.id'))
-	parent =        db.relationship("Roll", back_populates="linked_rfid")
+	id =              db.Column(db.Integer, primary_key=True)
+	name =            db.Column(db.String(64))
+	password_hash =   db.Column(db.String(128))
+	linked_roll =     db.Column(db.Integer, db.ForeignKey('roll.id'))
+	linked_roll_rel = db.relationship("Roll", back_populates="linked_rfid")
 
 	def __repr__(self):
 		return '<Station {}>'.format(self.name)

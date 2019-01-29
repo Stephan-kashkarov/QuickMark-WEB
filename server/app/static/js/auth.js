@@ -7,7 +7,7 @@ $(function(){
 		$(".active").removeClass("active")
 		$(this).addClass("active")
 
-		let tab = $(this).text()
+		var tab = $(this).text()
 		switch (tab) {
 			case "Login":
 				$(".steph-register").hide()
@@ -23,10 +23,9 @@ $(function(){
 				break;
 		}
 	})
-
-	$(".login-btn").on("click", async function (e) {
+	$(".login-btn").on("click", function (e) {
 		e.preventDefault()
-		let resp = $.ajax({
+		$.ajax({
 			type: "POST",
 			url: "/api/auth/login",
 			dataType: "json",
@@ -35,29 +34,52 @@ $(function(){
 				password: $(".login-pass").val(),
 				remember: $(".login-chck").val(),
 			},
-			success: function (msg) {
-				console.log("Hello!");
-				
-				
-			},
 		}).fail(function (resp) {
-			console.log("Hello!")
-			console.log(resp.status, resp.responseText)
 			if (resp.status == 200) {
 				$.notify({
-					title: 'Login',
-					messege: resp.responseText,
+					message: resp.responseText,
 				}, {
-					type: 'info',
+					type: 'danger',
 					animate: {
 						enter: 'animated fadeInDown',
 						exit: 'animated fadeOutUp'
 					},
 					allow_dismiss: true,
 				})
-
+			} else if (resp.status == 201){
+				$.notify({
+					title: 'Login | ',
+					message: "Succeeded",
+				}, {
+					type: 'success',
+					animate: {
+						enter: 'animated fadeInDown',
+						exit: 'animated fadeOutUp'
+					},
+					allow_dismiss: true,
+				})
 			}
 		})
+	})
+
+	$(".register-btn").on('click', function(e){
+		e.preventDefault()
 		
+		if (check_password() && check_username()){
+			$.ajax({
+				type: "POST",
+				url: "/api/auth/register",
+				dataType: "json",
+				data: {
+					username: $(".register-username").val(),
+					password: $(".register-password").val(),
+					email: $(".register-email").val(),
+				},
+			}).fail(function(resp){
+	
+			})
+		} else {
+			
+		}
 	})
 })

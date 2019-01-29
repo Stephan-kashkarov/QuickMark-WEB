@@ -1,3 +1,4 @@
+import re
 import json
 import pprint
 
@@ -33,6 +34,40 @@ from server.app.models import (
 
 from datetime import datetime
 
+email_regex = re.compile(r"([a-z'].*@([a-z][a-z0-9/-]*[a-z].?)*)", re.IGNORECASE)
+
+# general functions
+def check_username(username):
+    if len(username) < 1:
+        return False
+    if not re.match(r".*", username):
+        return False
+    if Person.query.filter_by(username=username):
+        return False
+    return True
+
+def check_email(email):
+    if not re.match(email_regex, email):
+        return False
+    return True
+
+def authStation(s_id, password):
+    station = RFIDStation.query.get_or_404(int(s_id))
+    if station and station.check_password(password):
+        return station
+    return False
+
+
+@app.route("/api/auth/check")
+def check_creds():
+    if request.is_json:
+        data = request.get_json()
+        if data['type'] == "username":
+            return jsonify(str(check_username(data['data'])))
+        elif data['type'] == "password":
+            return jsonify(str(check_email(data['data'])))
+    return jsonify(False)
+
 # Auth stuff
 @app.route("/api/auth/login", methods=["POST"])
 def login():
@@ -43,7 +78,7 @@ def login():
             user = Person.query.filter_by(email=data['username']).first_or_404()
         if user.check_password(data['password']):
             login_user(user)
-            return 'Login successful'
+            return 'Login successful', 201
         return "Login unsuccsessful - incorrect password"
     return "Login unsuccsessful - No user found"
 
@@ -70,12 +105,6 @@ def logout():
 
 
 # RFID stuff
-def authStation(s_id, password):
-    station = RFIDStation.query.get_or_404(int(s_id))
-    if station and station.check_password(password):
-        return station
-    return False
-
 @app.route("/api/rfid", methods=["POST"])
 def rfid():
     data = request.get_json()
