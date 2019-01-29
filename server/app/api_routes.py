@@ -21,6 +21,8 @@ from server.app.models import (
     Student
 )
 
+from datetime import datetime
+
 
 def authStation(s_id, password):
     station = RFIDStation.query.get_or_404(int(s_id))
@@ -28,55 +30,21 @@ def authStation(s_id, password):
         return station
     return False
 
-@app.route("/api/get/class", methods=["POST"])
-def apiClassGet():
+@app.route("/api", methods=["POST"])
+def API():
     data = request.get_json()
     if data:
         auth = data['auth']
-        station = authStation(auth['id'], auth['password'])
+        station = authStation(auth['id'], auth['key'])
         if station:
             data = data['payload']
-            roll = Class.query.get_or_404(data['class_id'])
-            rollObj = Roll()
-            rollObj.class_id = roll.id
-            db.session.add(rollObj)
-            students = Class_Student.query.filter_by(id=int(data['Class_id']))
-            for index, student in enumerate(students):
-                temp = Roll_Student()
-                temp.roll_id = rollObj.id
-                temp.student_id = student.id
-                db.session.add(temp)
-                students[index] = Student.query.get(int(student.student_id))
-            db.session.commit()
-            print(f"Class queryed: {roll}")
-            print(f"The roll contains {len(students)} students:")
-            for index, student in enumerate(students):
-                print(f"    {index}.  {student}")
+            student = Student.query.filter_by(uid=data['uid']).first_or_404()
+            marking_instance = Roll_Student.query.filter_by(student_id=student.id, roll_id=station.linked_roll)
+            marking_instance.present = True
+            marking_instance.marked_at = datetime.now()
 
-            print("Packaging...")
-            result = {
-                'class': {
-                    'id': roll.id,
-                    'title': roll.title,
-                    'roll': {
-                        'roll_id': rollObj.id,
-                        'students': [],
-                    },
-                },
-            }
-
-            for student in students:
-                studentObj = {
-                    'id': student.id,
-                    'name': student.name,
-                    'rfid': student.rfid,
-                    'present': False,
-                }
-                result['class']['roll']['students'].append(studentObj)
-
-            print("Packaged!")
-            pprint.pprint(result)
-            return jsonify([len(json.dumps(result).encode('utf-8')), result])
+            return "Operation succsessful"
 
 
-    return "invalid auth"
+        return "Invalid auth details"
+    return "No Json"

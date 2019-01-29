@@ -61,7 +61,7 @@ class Student(db.Model):
 	id =           db.Column(db.Integer, primary_key=True)
 	student_id =   db.Column(db.Integer)
 	student_name = db.Column(db.String(50))
-	rfid =         db.Column(db.BLOB)
+	rfid =         db.Column(db.Integer)
 	roll =         db.relationship("Roll_Student", backref="student", lazy="dynamic")
 
 	def __repr__(self):
