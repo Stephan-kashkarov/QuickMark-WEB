@@ -34,7 +34,6 @@ from server.app.models import (
 from datetime import datetime
 
 # Auth stuff
-
 @app.route("/api/auth/login", methods=["POST"])
 def login():
     if request.is_json():
@@ -76,7 +75,7 @@ def authStation(s_id, password):
     return False
 
 @app.route("/api/rfid", methods=["POST"])
-def API():
+def rfid():
     data = request.get_json()
     if data:
         auth = data['auth']
