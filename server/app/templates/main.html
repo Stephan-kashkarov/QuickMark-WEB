@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" id="mynav">
 	<a class="navbar-brand" href="{{url_for('index')}}">
-		<img class="logo" src="{{url_for('.static', filename='media/logo.png')}}"/>
+		<img class="logo" src="{{url_for('.static', filename='media/.png')}}"/>
 	</a>
 	<hr>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -13,13 +13,11 @@
 
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav mr-auto">
-			<li class="bar">
-
-			</li>
+	
 			<li class="nav-item active">
 				<a class="nav-link" href="#">Home</a>
 			</li>
-			
+		
 			{% if current_user.is_authenticated %}
 			<li class="nav-item active">
 				<a class="nav-link" href="#">Dash</a>
