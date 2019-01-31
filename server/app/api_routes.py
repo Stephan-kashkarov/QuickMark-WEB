@@ -34,39 +34,11 @@ from server.app.models import (
 
 from datetime import datetime
 
-email_regex = re.compile(r"([a-z'].*@([a-z][a-z0-9/-]*[a-z].?)*)", re.IGNORECASE)
-
-# general functions
-def check_username(username):
-    if len(username) < 1:
-        return False
-    if not re.match(r".*", username):
-        return False
-    if Person.query.filter_by(username=username):
-        return False
-    return True
-
-def check_email(email):
-    if not re.match(email_regex, email):
-        return False
-    return True
-
 def authStation(s_id, password):
     station = RFIDStation.query.get_or_404(int(s_id))
     if station and station.check_password(password):
         return station
     return False
-
-
-@app.route("/api/auth/check")
-def check_creds():
-    if request.is_json:
-        data = request.get_json()
-        if data['type'] == "username":
-            return jsonify(str(check_username(data['data'])))
-        elif data['type'] == "password":
-            return jsonify(str(check_email(data['data'])))
-    return jsonify(False)
 
 # Auth stuff
 @app.route("/api/auth/login", methods=["POST"])
@@ -84,7 +56,10 @@ def login():
 
 @app.route("/api/auth/register", methods=["POST"])
 def register():
+    print(dir(request))
+    print(request.get_json())
     if request.is_json:
+        print("true")
         data = request.get_json()
         if not Person.query.filter_by(username=data['username']):
             user = Person()
@@ -93,7 +68,7 @@ def register():
             user.set_password(data['password'])
             db.session.add(user)
             db.session.commit()
-            return "Registration Succsesful - try logging in"
+            return "Registration Succsesful - try logging in", 201
         return "Registration unsuccsesful - User already exists"
     return "Registration unsuccsesful - data 404"
 
