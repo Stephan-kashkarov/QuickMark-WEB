@@ -29,7 +29,7 @@ $(function(){
 		$.ajax({
 			type: "POST",
 			url: "/api/auth/login",
-			dataType: "application/json",
+			dataType: "json",
 			data: {
 				username: $(".login-user").val(),
 				password: $(".login-pass").val(),
@@ -69,22 +69,23 @@ $(function(){
 		$.ajax({
 			type: "POST",
 			url: "/api/auth/register",
-			dataType: "application/json",
+			dataType: "json",
 			data: {
 				username: $(".register-username").val(),
 				password: $(".register-password").val(),
 				email: $(".register-email").val(),
 			},
 		}).fail(function(resp){
+			console.log(resp.status, resp);
 			$.notify({
 				message: resp.responseText,
 			},{
 				type: "info",
 				animate: {
-						enter: 'animated fadeInDown',
-						exit: 'animated fadeOutUp'
-					},
-					allow_dismiss: true,
+					enter: 'animated fadeInDown',
+					exit: 'animated fadeOutUp'
+				},
+				allow_dismiss: true,
 			})
 		})
 	})
