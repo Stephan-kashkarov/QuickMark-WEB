@@ -23,12 +23,13 @@ $(function(){
 				break;
 		}
 	})
+
 	$(".login-btn").on("click", function (e) {
 		e.preventDefault()
 		$.ajax({
 			type: "POST",
 			url: "/api/auth/login",
-			dataType: "json",
+			dataType: "application/json",
 			data: {
 				username: $(".login-user").val(),
 				password: $(".login-pass").val(),
@@ -65,21 +66,26 @@ $(function(){
 	$(".register-btn").on('click', function(e){
 		e.preventDefault()
 		
-		if (check_password() && check_username()){
-			$.ajax({
-				type: "POST",
-				url: "/api/auth/register",
-				dataType: "json",
-				data: {
-					username: $(".register-username").val(),
-					password: $(".register-password").val(),
-					email: $(".register-email").val(),
-				},
-			}).fail(function(resp){
-	
+		$.ajax({
+			type: "POST",
+			url: "/api/auth/register",
+			dataType: "application/json",
+			data: {
+				username: $(".register-username").val(),
+				password: $(".register-password").val(),
+				email: $(".register-email").val(),
+			},
+		}).fail(function(resp){
+			$.notify({
+				message: resp.responseText,
+			},{
+				type: "info",
+				animate: {
+						enter: 'animated fadeInDown',
+						exit: 'animated fadeOutUp'
+					},
+					allow_dismiss: true,
 			})
-		} else {
-			
-		}
+		})
 	})
 })
