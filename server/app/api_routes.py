@@ -40,12 +40,12 @@ def authStation(s_id, password):
         return station
     return False
 
-
 # Auth stuff
 @app.route("/api/auth/login", methods=["POST"])
 def login():
     if request.is_json:
         data = request.get_json()
+        print(data)
         user = Person.query.filter_by(username=data['username']).first()
         if not user:
             user = Person.query.filter_by(email=data['username']).first_or_404()
@@ -57,18 +57,9 @@ def login():
 
 @app.route("/api/auth/register", methods=["POST"])
 def register():
-    print(request)
-    print("-"*20)
-    print(dir(request))
-    print("-"*20)
-    print(request.headers)
-    print("-"*20)
-    print(request.get_json())
-    print(request.get_data())
-
     if request.is_json:
-        print("true")
         data = request.get_json()
+        print(data)
         if not Person.query.filter_by(username=data['username']):
             user = Person()
             user.username = data['username']

@@ -23,17 +23,17 @@
 	<div class="steph-login">
 		<form>
 			<div class="form-group">
-				<label for="login_username">Username or Email address</label>
-				<input type="email" class="form-control" id="login_username" aria-describedby="emailHelp" placeholder="Enter username or email">
+				<label for="login-user">Username or Email address</label>
+				<input type="email" class="form-control" id="login-user" aria-describedby="emailHelp" placeholder="Enter username or email">
 				<small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
 			</div>
 			<div class="form-group">
-				<label for="login_password">Password</label>
-				<input type="password" class="form-control" id="login_password" placeholder="Password">
+				<label for="login-pass">Password</label>
+				<input type="password" class="form-control" id="login-pass" placeholder="Password">
 			</div>
 			<div class="form-group form-check">
-				<input type="checkbox" class="form-check-input" id="remember_me">
-				<label class="form-check-label" for="remember_me">Remember me</label>
+				<input type="checkbox" class="form-check-input" id="login-chck">
+				<label class="form-check-label" for="login-chck">Remember me</label>
 			</div>
 			<button type="submit" class="btn btn-primary login-btn">Submit</button>
 		</form>
@@ -52,7 +52,8 @@
 			<div class="form-row">
 				<div class="form-group col-md-6">
 					<label for="register-password">Password</label>
-					<input type="email" class="form-control" id="register-password" placeholder="Email">
+					<input type="password" class="form-control" id="register-password" placeholder="Type Password">
+					<small id="passwordHelp" class="form-text text-muted">The passwords are hashed so dont worry about me stealing them</small>
 				</div>
 				<div class="form-group col-md-6">
 					<label for="register-password2">Confirm Password</label>

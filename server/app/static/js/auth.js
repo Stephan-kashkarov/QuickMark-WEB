@@ -26,15 +26,20 @@ $(function(){
 
 	$(".login-btn").on("click", function (e) {
 		e.preventDefault()
+		jsonData = JSON.stringify({
+			username: $("#login-user").val(),
+			password: $("#login-pass").val(),
+			remember: $("#login-chck").val(),
+		})
+		console.log(jsonData);
+		
 		$.ajax({
 			type: "POST",
 			url: "/api/auth/login",
-			dataType: "json",
-			data: {
-				username: $(".login-user").val(),
-				password: $(".login-pass").val(),
-				remember: $(".login-chck").val(),
-			},
+			contentType: 'application/json;charset=UTF-8',
+			dataType: 'jsonp',
+			async: false,
+			data: jsonData,
 		}).fail(function (resp) {
 			if (resp.status == 200) {
 				$.notify({
@@ -65,16 +70,17 @@ $(function(){
 
 	$(".register-btn").on('click', function(e){
 		e.preventDefault()
-		
+		jsonData = JSON.stringify({
+			"username": $("#register-username").val(),
+			"password": $("#register-password").val(),
+			"email": $("#register-email").val(),
+		})
 		$.ajax({
 			type: "POST",
 			url: "/api/auth/register",
-			dataType: "json",
-			data: {
-				username: $(".register-username").val(),
-				password: $(".register-password").val(),
-				email: $(".register-email").val(),
-			},
+			contentType: 'application/json;charset=UTF-8',
+			dataType: 'jsonp',
+			data: jsonData,
 		}).fail(function(resp){
 			console.log(resp.status, resp);
 			$.notify({
