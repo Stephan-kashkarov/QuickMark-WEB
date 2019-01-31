@@ -31,7 +31,7 @@
 		</ul>
 		<div class="btn-group">
 			{% if not current_user.is_authenticated %}
-			<button type="button" class="btn btn-secondary nav-login">Login</button>
+<button type="button" class="btn btn-secondary nav-login" onclick="window.location.pathname = String({{url_for('login')}})">Login</button>
 			{% else %}
 				{% if user %}
 			<button type="button" class="btn btn-secondary nav-profile">{{user.name}}</button>
@@ -47,7 +47,7 @@
 				<a class="dropdown-item" href="#">Account</a>
 				<a class="dropdown-item" href="#">Settings</a>
 				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="{{url_for('logout')}}">Logout</a>
+				<a class="dropdown-item" id="logout" href="">Logout</a>
 			</div>
 			{% endif %}
 		</div>

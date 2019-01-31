@@ -1,7 +1,6 @@
 $(function(){
 	$(".steph-register").hide()
 
-
 	$(".nav-link").on('click', function (e) {
 		e.preventDefault()
 		$(".active").removeClass("active")
@@ -29,7 +28,7 @@ $(function(){
 		jsonData = JSON.stringify({
 			username: $("#login-user").val(),
 			password: $("#login-pass").val(),
-			remember: $("#login-chck").val(),
+			remember: !($("#login-chck").val()),
 		})
 		console.log(jsonData);
 		
@@ -52,17 +51,7 @@ $(function(){
 					allow_dismiss: true,
 				})
 			} else if (resp.status == 201){
-				$.notify({
-					title: 'Login | ',
-					message: "Succeeded",
-				}, {
-					type: 'success',
-					animate: {
-						enter: 'animated fadeInDown',
-						exit: 'animated fadeOutUp'
-					},
-					allow_dismiss: true,
-				})
+				window.location.pathname = "/dash"
 			}
 		})
 	})
@@ -74,6 +63,7 @@ $(function(){
 			"password": $("#register-password").val(),
 			"email": $("#register-email").val(),
 		})
+		console.log(jsonData)
 		$.ajax({
 			type: "POST",
 			url: "/api/auth/register",
@@ -92,6 +82,9 @@ $(function(){
 				},
 				allow_dismiss: true,
 			})
+			if (resp.status == 201){
+				setTimeout(5000, window.location.reload)
+			}3
 		})
 	})
 })

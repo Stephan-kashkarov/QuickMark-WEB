@@ -45,7 +45,6 @@ def authStation(s_id, password):
 def login():
     if request.is_json:
         data = request.get_json()
-        print(data)
         user = Person.query.filter_by(username=data['username']).first()
         if not user:
             user = Person.query.filter_by(email=data['username']).first_or_404()
@@ -59,7 +58,6 @@ def login():
 def register():
     if request.is_json:
         data = request.get_json()
-        print(data)
         if not Person.query.filter_by(username=data['username']):
             user = Person()
             user.username = data['username']
@@ -74,7 +72,7 @@ def register():
 @login_required
 @app.route("/api/auth/logout", methods=["POST"])
 def logout():
-    logout_user(current_user)
+    logout_user()
     return "Logout Succsesful"
 
 

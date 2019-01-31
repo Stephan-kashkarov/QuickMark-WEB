@@ -27,5 +27,13 @@ $.fn.extend({
 });
 
 $(function(){
-
+	$("#logout").on('click', (e) => {
+		e.preventDefault()
+		$.ajax({
+			url:"/api/auth/logout",
+			type: "POST",
+		}).then(() => {
+			window.location.reload()
+		})
+	})
 })
