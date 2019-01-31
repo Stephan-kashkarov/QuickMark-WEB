@@ -38,7 +38,6 @@ $(function(){
 			url: "/api/auth/login",
 			contentType: 'application/json;charset=UTF-8',
 			dataType: 'jsonp',
-			async: false,
 			data: jsonData,
 		}).fail(function (resp) {
 			if (resp.status == 200) {
