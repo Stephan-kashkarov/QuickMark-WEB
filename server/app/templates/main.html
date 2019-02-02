@@ -31,10 +31,10 @@
 		</ul>
 		<div class="btn-group">
 			{% if not current_user.is_authenticated %}
-<button type="button" class="btn btn-secondary nav-login" onclick="window.location.pathname = '{{url_for('auth')}}'">Login</button>
+				<button type="button" class="btn btn-secondary nav-login" onclick="window.location.pathname = '{{url_for('auth')}}'">Login</button>
 			{% else %}
 				{% if user %}
-			<button type="button" class="btn btn-secondary nav-profile">{{user.name}}</button>
+			<button type="button" class="btn btn-secondary nav-profile">{{user.username}}</button>
 				{% else %}
 			<button type="button" class="btn btn-secondary nav-profile">Account</button>
 				{% endif %}

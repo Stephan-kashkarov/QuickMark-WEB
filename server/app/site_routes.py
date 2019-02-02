@@ -1,6 +1,6 @@
 from server.app import app, db
 from flask import redirect, url_for, flash, render_template, request
-from server.app.models import Class, Roll, Student, Person 
+from server.app.models import Class, Roll, Student, Person , Access
 
 from flask_login import current_user, login_user, login_required, logout_user
 
@@ -15,5 +15,8 @@ def auth():
 @app.route("/dash")
 @login_required
 def dash():
-	return render_template("dash.html")
+	user = current_user
+	classes = [Class.query.get(x) for x in Access.query.filter_by(person_id=user.id)]
+	print(user, classes)
+	return render_template("dash.html", user=user, classes=classes)
 
