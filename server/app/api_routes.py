@@ -69,12 +69,22 @@ def register():
         return "Registration unsuccsesful - User already exists"
     return "Registration unsuccsesful - data 404"
 
-@login_required
 @app.route("/api/auth/logout", methods=["POST"])
+@login_required
 def logout():
     logout_user()
     return "Logout Succsesful"
 
+
+# Class Stuff
+
+@app.route("/class/make", methods=["POST"])
+@login_required
+def class_make():
+    if request.is_json:
+        data = request.get_json()
+        #TODO make code
+    return "Couldn't create class - data 404"
 
 # RFID stuff
 @app.route("/api/rfid", methods=["POST"])
