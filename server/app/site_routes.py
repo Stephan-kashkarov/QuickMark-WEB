@@ -17,7 +17,8 @@ def auth():
 def dash():
 	user = current_user
 	classes = [Class.query.get(x) for x in Access.query.filter_by(person_id=user.id)]
-	print(user, classes)
+	if classes:
+		print(user, classes)
 	return render_template("dash.html", user=user, classes=classes)
 
 
