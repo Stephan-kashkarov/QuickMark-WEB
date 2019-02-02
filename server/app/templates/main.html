@@ -33,8 +33,8 @@
 			{% if not current_user.is_authenticated %}
 				<button type="button" class="btn btn-secondary nav-login" onclick="window.location.pathname = '{{url_for('auth')}}'">Login</button>
 			{% else %}
-				{% if user %}
-			<button type="button" class="btn btn-secondary nav-profile">{{user.username}}</button>
+				{% if current_user %}
+			<button type="button" class="btn btn-secondary nav-profile">{{current_user.username}}</button>
 				{% else %}
 			<button type="button" class="btn btn-secondary nav-profile">Account</button>
 				{% endif %}

@@ -20,3 +20,19 @@ def dash():
 	print(user, classes)
 	return render_template("dash.html", user=user, classes=classes)
 
+
+@app.route("/class")
+@login_required
+def classes():
+	return "WIP"
+
+@app.route("/class/<c_id>")
+@login_required
+def class_id(c_id):
+	return "WIP"
+
+@app.route("/class/make")
+@login_required
+def class_make():
+	return "WIP"
+

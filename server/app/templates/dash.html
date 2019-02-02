@@ -9,4 +9,31 @@
 {% endblock %}
 
 {% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <h3>Classes</h3>
+            <hr>
+            {% if classes %}
+            
+            {% else %}
+            {% for class in classes %}
+                <div class="col-lg-3">
+                    <div class="card {{class.title}}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{class.title}}</h5>
+                            <p class="card-text">{{class.desc}}</p>
+                            <a href="{{url_for('class_id', c_id=class.id)}}" class="btn btn-primary">Mark</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="col-4">
+            <h3>Previous Rolls</h3>
+            <hr>
+        </div>
+    </div>
+</div>
 {% endblock %}
