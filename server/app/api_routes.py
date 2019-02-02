@@ -49,7 +49,7 @@ def login():
         if not user:
             user = Person.query.filter_by(email=data['username']).first_or_404()
         if user.check_password(data['password']):
-            login_user(user)
+            login_user(user, remember=data['remember'])
             return 'Login successful', 201
         return "Login unsuccsessful - incorrect password"
     return "Login unsuccsessful - No user found"
@@ -58,7 +58,7 @@ def login():
 def register():
     if request.is_json:
         data = request.get_json()
-        if not Person.query.filter_by(username=data['username']):
+        if not Person.query.filter_by(username=data['username']).first():
             user = Person()
             user.username = data['username']
             user.email = data['email']

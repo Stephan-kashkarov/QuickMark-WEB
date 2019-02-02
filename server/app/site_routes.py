@@ -12,8 +12,8 @@ def index():
 def auth():
 	return render_template("auth.html")
 
-@login_required
 @app.route("/dash")
+@login_required
 def dash():
 	return render_template("dash.html")
 
