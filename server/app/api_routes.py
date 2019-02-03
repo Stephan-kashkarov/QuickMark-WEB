@@ -29,7 +29,8 @@ from server.app.models import (
     RFIDStation,
     Roll,
     Roll_Student,
-    Student
+    Student,
+    Access
 )
 
 from datetime import datetime
@@ -83,7 +84,39 @@ def logout():
 def class_make():
     if request.is_json:
         data = request.get_json()
-        #TODO make code
+        try:
+            c = Class()
+            c.title = data['title']
+            c.desc = data['desc']
+            db.session.add(c)
+            a = Access()
+            a.class_id = c.id
+            a.person_id = current_user.id
+            db.session.add(a)
+            for student_id in data['students']:
+                link = Class_Student()
+                link.student_id = student_id
+                link.roll_id = c.id
+            db.session.commit()
+            return "Successfully created class"
+        except KeyError:
+            return "Invalid JSON format"
+    return "Couldn't create class - data 404"
+
+@app.route("/student/make", methods=["POST"])
+@login_required
+def student_make():
+    if request.is_json:
+        data = request.get_json()
+        try:
+            s = Student()
+            s.student_name = data['name']
+            s.rfid = data['rfid']
+            db.session.add(s)
+            db.session.commit()
+            return "Student created successfully"
+        except KeyError:
+            return "Invalid JSON format"
     return "Couldn't create class - data 404"
 
 # RFID stuff
