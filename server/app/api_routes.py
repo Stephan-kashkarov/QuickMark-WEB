@@ -79,7 +79,7 @@ def logout():
 
 # Class Stuff
 
-@app.route("/class/make", methods=["POST"])
+@app.route("/api/class/make", methods=["POST"])
 @login_required
 def class_make():
     if request.is_json:
@@ -103,7 +103,7 @@ def class_make():
             return "Invalid JSON format"
     return "Couldn't create class - data 404"
 
-@app.route("/student/make", methods=["POST"])
+@app.route("/api/student/make", methods=["POST"])
 @login_required
 def student_make():
     if request.is_json:
