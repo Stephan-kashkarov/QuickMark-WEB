@@ -1,9 +1,12 @@
 .banner{
-    width:100% !important;
-    text-align:center;
-    margin-top:300px;
-    margin-bottom:300px;
+   height:900px;
 }
-body{
-    background-color: grey;
+.the_background{
+    width:100%;
+    max-height:950px;
+    position: absolute;
+    z-index:-1;
+    top:0;
+    left:0;
+
 }

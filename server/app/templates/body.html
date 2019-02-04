@@ -7,7 +7,11 @@
 {% block body %}
 
    <div class="container-fluid banner">
-        <img src="{{url_for('.static', filename='media/img.jpg')}}"/>
+        <img class="the_background" src="{{url_for('.static', filename='media/bng.png')}}" />
+  </div>
+
+  <div class="center_section">
+      <button type="button" class="btn btn-primary btn-lg">Begin</button>
   </div>
 
 {% endblock %}

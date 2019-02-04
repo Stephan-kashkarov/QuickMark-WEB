@@ -15,7 +15,7 @@
 		<ul class="navbar-nav mr-auto">
 	
 			<li class="nav-item active">
-				<a class="nav-link di" href="#">Home</a>
+				<a class="nav-link di" href="{{url_for('index')}}">Home</a>
 			</li>
 
 			<li class="nav-item active">
@@ -52,6 +52,9 @@
 		</div>
 	</div>
 </nav>
+{% endblock %}
+
+{% block body %}
 {% endblock %}
 
 {% block footer %}

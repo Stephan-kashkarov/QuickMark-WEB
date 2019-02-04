@@ -6,10 +6,10 @@
 $(document).ready(function(){
 	$(".di").hover(function () {
 		$(this).css("border-bottom", "2px solid red");
-		$(this).css("color", "grey");
+		$(this).css("color", "rgb(209, 209, 209)");
 	}, function () {
 		$(this).css("border-bottom", "1px solid red");
-		$(this).css("color", "black");
+			$(this).css("color", "rgb(20, 20, 20)");
 	});
 });
 	
