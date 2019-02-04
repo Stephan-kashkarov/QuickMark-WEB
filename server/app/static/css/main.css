@@ -51,4 +51,33 @@ input .is-valid {
 input .is-invalid {
 	border-color: #dc3545 !important;
 }
+.logo{
+	width:200px;
+	margin-left:100px;
+	margin-top:-30px;
+}
 
+.navbar-collapse{
+	float:righ
+}
+
+#navbarSupportedContent{
+	float:right;
+}
+
+.nav-link{
+	display:inline-block !important;
+	float: right;
+}
+
+.navbar-nav{
+	margin-left:75%;
+}
+
+.nav-link{
+	font-family: Montserrat;
+
+}
+.nav-item{
+	padding-left:40px;
+}

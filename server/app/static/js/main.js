@@ -1,4 +1,19 @@
 // See https://github.com/daneden/animate.css
+
+
+
+
+$(document).ready(function(){
+	$(".di").hover(function () {
+		$(this).css("border-bottom", "2px solid red");
+		$(this).css("color", "grey");
+	}, function () {
+		$(this).css("border-bottom", "1px solid red");
+		$(this).css("color", "black");
+	});
+});
+	
+	
 $.fn.extend({
 	animateCss: function (animationName, callback) {
 		var animationEnd = (function (el) {
@@ -39,13 +54,4 @@ $(function(){
 })
 
 
-window.onscroll = function () { myFunction() };
-var header = document.getElementById("mynav");
-var sticky = header.offsetTop;
-function myFunction() {
-	if (window.pageYOffset > sticky) {
-		header.classList.add("sticky");
-	} else {
-		header.classList.remove("sticky");
-	}
-} 
+
