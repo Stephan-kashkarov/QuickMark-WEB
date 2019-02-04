@@ -5,12 +5,13 @@
 
 $(document).ready(function(){
 	$(".di").hover(function () {
-		$(this).css("border-bottom", " 3px solid black");
-		$(this).css("color", "rgb(209, 209, 209)");
-		$(this).css("border-radius", "2px");
+		$(this).css("font-size", "22.5px");
+		$(this).css("color", "#e5e5e5");
+		$(this).css("border-bottom", "3px solid #ffdbdb");
 	}, function () {
-		$(this).css("border-bottom", "2px solid red");
-			$(this).css("color", "rgb(20, 20, 20)");
+		$(this).css("font-size", "22px");
+		$(this).css("color", "black");
+		$(this).css("border-bottom", "3px solid red");
 	});
 });
 	
