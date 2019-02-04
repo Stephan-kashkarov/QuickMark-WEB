@@ -7,7 +7,7 @@ $(document).ready(function(){
 	$(".di").hover(function () {
 		$(this).css("font-size", "22.5px");
 		$(this).css("color", "#e5e5e5");
-		$(this).css("border-bottom", "3px solid #ffdbdb");
+		$(this).css("border-bottom", "3px solid ");
 	}, function () {
 		$(this).css("font-size", "22px");
 		$(this).css("color", "black");

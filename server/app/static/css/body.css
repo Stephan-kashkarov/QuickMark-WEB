@@ -1,5 +1,6 @@
 .banner{
     max-height:1200px;
+    
 }
 .the_background{
     width:100%;
@@ -9,12 +10,13 @@
     top:5%;;
     left:0;
     
+    
 
 }
 .center_section{
     margin-top:20%;
     text-align:center;
-   
+    
 }
 
 .cb{
@@ -55,4 +57,30 @@
 }
 .part{
     margin-top:-2.5%;
+}
+
+.under{
+    width:100%;
+    height:80%;   
+    border:10px solid blue;
+    z-index:20;
+    position: absolute;
+    margin-top:20%;
+    background-color:grey;
+}
+
+.a{
+    width: 100%;
+    text-align:center;
+    background-color: white;
+    
+}
+
+.one{
+    max-height:500px;
+    background-color: green;
+}
+
+.col{
+    max-height:
 }
