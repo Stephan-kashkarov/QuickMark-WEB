@@ -15,11 +15,11 @@
 		<ul class="navbar-nav mr-auto">
 	
 			<li class="nav-item active">
-				<a class="nav-link di" href="{{url_for('index')}}">Home</a>
+				<a class="navbar-brand nav-link di" href="{{url_for('index')}}">Home</a>
 			</li>
 
 			<li class="nav-item active">
-				<a class="nav-link di" href="#">System</a>
+				<a class="navbar-brand nav-link di" href="#">Guide</a>
 			</li>
 		
 			{% if current_user.is_authenticated %}

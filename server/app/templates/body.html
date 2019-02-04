@@ -11,7 +11,10 @@
   </div>
 
   <div class="center_section">
-      <button type="button" class="btn btn-primary btn-lg">Begin</button>
+      <button type="button" class="btn btn-primary btn-lg cb" onclick="window.location.pathname = '{{url_for('auth')}}'">Get Started</button>
+      <div class="part">
+        <a class="sub_btn " href="{{url_for('auth')}}">Login / SignUp</a>
+      </div>
   </div>
 
 {% endblock %}

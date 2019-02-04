@@ -5,10 +5,11 @@
 
 $(document).ready(function(){
 	$(".di").hover(function () {
-		$(this).css("border-bottom", "2px solid red");
+		$(this).css("border-bottom", " 3px solid black");
 		$(this).css("color", "rgb(209, 209, 209)");
+		$(this).css("border-radius", "2px");
 	}, function () {
-		$(this).css("border-bottom", "1px solid red");
+		$(this).css("border-bottom", "2px solid red");
 			$(this).css("color", "rgb(20, 20, 20)");
 	});
 });

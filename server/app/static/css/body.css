@@ -1,12 +1,56 @@
 .banner{
-   height:900px;
+    max-height:1200px;
 }
 .the_background{
     width:100%;
-    max-height:950px;
+    max-height:1200px;
     position: absolute;
     z-index:-1;
-    top:0;
+    top:5%;;
     left:0;
+    
 
+}
+.center_section{
+    margin-top:20%;
+    text-align:center;
+   
+}
+
+.cb{
+     font-size:50px;
+     padding:20px;
+     padding-left:50px;
+     padding-right:50px;
+     border-radius: 4%;
+     font-family: Montserrat;
+     background-color:rgb(255, 66, 66);
+     border-color: rgb(255, 66, 66);
+    
+}
+
+.btn-primary:hover{
+    background-color:#C14747;
+    border-color:#C14747;
+}
+.btn-primary:active{
+    background-color:#C14747;
+    border-color:#C14747;
+}
+.btn-primary:focus{
+    background-color:#C14747;
+    border-color:#C14747;
+}
+
+.sub_btn{
+    text-align:center;
+    color: white;
+    font-family: Montserrat;
+}
+.sub_btn:hover{
+    color:#D8D8D8;
+    text-decoration:none;
+}
+.part{
+    margin-top:-30px;
 }

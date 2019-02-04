@@ -33,6 +33,7 @@ body {
 	background-color: #6c757d;
 	color: white;
 	min-height: 10%;
+	margin-top:20%;
 }
 
 .footer p {
@@ -79,7 +80,11 @@ input .is-invalid {
 .nav-link{
 	font-family: Montserrat;
 	color:rgb(20, 20, 20);
+	border-bottom:2px solid red;
 
+}
+.nav-link:hover{
+	color:grey;
 }
 .nav-item{
 	padding-left:40px;
