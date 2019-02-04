@@ -22,17 +22,14 @@
 			<li class="nav-item active">
 				<a class="nav-link" href="#">Dash</a>
 			</li>
-			<li class="nav-item active">
-				<a class="nav-link" href="#">Classes</a>
-			</li>
 			{% endif %}
 		</ul>
 		<div class="btn-group">
 			{% if not current_user.is_authenticated %}
-<button type="button" class="btn btn-secondary nav-login" onclick="window.location.pathname = String({{url_for('login')}})">Login</button>
+				<button type="button" class="btn btn-secondary nav-login" onclick="window.location.pathname = '{{url_for('auth')}}'">Login</button>
 			{% else %}
-				{% if user %}
-			<button type="button" class="btn btn-secondary nav-profile">{{user.name}}</button>
+				{% if current_user %}
+			<button type="button" class="btn btn-secondary nav-profile">{{current_user.username}}</button>
 				{% else %}
 			<button type="button" class="btn btn-secondary nav-profile">Account</button>
 				{% endif %}

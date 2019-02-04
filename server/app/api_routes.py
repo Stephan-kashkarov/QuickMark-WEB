@@ -29,7 +29,8 @@ from server.app.models import (
     RFIDStation,
     Roll,
     Roll_Student,
-    Student
+    Student,
+    Access
 )
 
 from datetime import datetime
@@ -49,7 +50,7 @@ def login():
         if not user:
             user = Person.query.filter_by(email=data['username']).first_or_404()
         if user.check_password(data['password']):
-            login_user(user)
+            login_user(user, remember=data['remember'])
             return 'Login successful', 201
         return "Login unsuccsessful - incorrect password"
     return "Login unsuccsessful - No user found"
@@ -58,7 +59,7 @@ def login():
 def register():
     if request.is_json:
         data = request.get_json()
-        if not Person.query.filter_by(username=data['username']):
+        if not Person.query.filter_by(username=data['username']).first():
             user = Person()
             user.username = data['username']
             user.email = data['email']
@@ -69,12 +70,54 @@ def register():
         return "Registration unsuccsesful - User already exists"
     return "Registration unsuccsesful - data 404"
 
-@login_required
 @app.route("/api/auth/logout", methods=["POST"])
+@login_required
 def logout():
     logout_user()
     return "Logout Succsesful"
 
+
+# Class Stuff
+
+@app.route("/api/class/make", methods=["POST"])
+@login_required
+def class_make():
+    if request.is_json:
+        data = request.get_json()
+        try:
+            c = Class()
+            c.title = data['title']
+            c.desc = data['desc']
+            db.session.add(c)
+            a = Access()
+            a.class_id = c.id
+            a.person_id = current_user.id
+            db.session.add(a)
+            for student_id in data['students']:
+                link = Class_Student()
+                link.student_id = student_id
+                link.roll_id = c.id
+            db.session.commit()
+            return "Successfully created class"
+        except KeyError:
+            return "Invalid JSON format"
+    return "Couldn't create class - data 404"
+
+@app.route("/api/student/make", methods=["POST"])
+@login_required
+def student_make():
+    if request.is_json:
+        data = request.get_json()
+        try:
+            s = Student()
+            s.student_name = data['name']
+            s.rfid = data['rfid']
+            db.session.add(s)
+            db.session.commit()
+            return "Student created successfully"
+        except KeyError:
+            return "Invalid JSON format"
+    return "Couldn't create class - data 404"
 
 # RFID stuff
 @app.route("/api/rfid", methods=["POST"])

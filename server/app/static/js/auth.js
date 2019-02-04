@@ -30,7 +30,6 @@ $(function(){
 			password: $("#login-pass").val(),
 			remember: !($("#login-chck").val()),
 		})
-		console.log(jsonData);
 		
 		$.ajax({
 			type: "POST",
@@ -39,7 +38,7 @@ $(function(){
 			dataType: 'jsonp',
 			data: jsonData,
 		}).fail(function (resp) {
-			if (resp.status == 200) {
+			if (resp.status != 201) {
 				$.notify({
 					message: resp.responseText,
 				}, {
@@ -50,7 +49,7 @@ $(function(){
 					},
 					allow_dismiss: true,
 				})
-			} else if (resp.status == 201){
+			} else {
 				window.location.pathname = "/dash"
 			}
 		})
@@ -63,7 +62,6 @@ $(function(){
 			"password": $("#register-password").val(),
 			"email": $("#register-email").val(),
 		})
-		console.log(jsonData)
 		$.ajax({
 			type: "POST",
 			url: "/api/auth/register",
@@ -84,7 +82,7 @@ $(function(){
 			})
 			if (resp.status == 201){
 				setTimeout(5000, window.location.reload)
-			}3
+			}
 		})
 	})
 })
