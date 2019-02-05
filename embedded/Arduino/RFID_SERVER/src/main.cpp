@@ -136,6 +136,7 @@ void wifi_init(const char* ssid, const char* password)
 
 }
 
+
 // RFID Functions
 bool card_present()
 {

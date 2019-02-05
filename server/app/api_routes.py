@@ -111,7 +111,10 @@ def student_make():
         try:
             s = Student()
             s.student_name = data['name']
-            s.rfid = data['rfid']
+            if data['rfid'] == 'scan':
+                s.rfid = scan
+            else:
+                s.rfid = data['rfid']
             db.session.add(s)
             db.session.commit()
             return "Student created successfully"
@@ -128,10 +131,13 @@ def rfid():
         station = authStation(auth['id'], auth['key'])
         if station:
             data = data['payload']
-            student = Student.query.filter_by(uid=data['uid']).first_or_404()
-            marking_instance = Roll_Student.query.filter_by(student_id=student.id, roll_id=station.linked_roll)
-            marking_instance.present = True
-            marking_instance.marked_at = datetime.now()
+            student = Student.query.filter_by(uid=data['uid']).first()
+            if not student:
+                scan = data['uid']
+            else:
+                marking_instance = Roll_Student.query.filter_by(student_id=student.id, roll_id=station.linked_roll)
+                marking_instance.present = True
+                marking_instance.marked_at = datetime.now()
 
             return "Operation succsessful"
         return "Invalid auth details"
