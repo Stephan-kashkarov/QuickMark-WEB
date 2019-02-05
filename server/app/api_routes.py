@@ -81,7 +81,7 @@ def logout():
 
 @app.route("/api/class/make", methods=["POST"])
 @login_required
-def class_make():
+def class_gen():
     if request.is_json:
         data = request.get_json()
         try:
