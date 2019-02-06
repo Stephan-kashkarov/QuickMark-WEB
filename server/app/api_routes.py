@@ -3,23 +3,22 @@ import json
 import pprint
 
 from flask import (
-    flash,
     jsonify,
     redirect,
     render_template,
     request,
-    url_for
+    url_for,
 )
 from flask_login import (
     login_required,
     login_user,
     logout_user,
-    current_user
+    current_user,
 )
 
 from server.app import (
     app,
-    db
+    db,
 )
 
 from server.app.models import (
@@ -30,7 +29,7 @@ from server.app.models import (
     Roll,
     Roll_Student,
     Student,
-    Access
+    Access,
 )
 
 from datetime import datetime
@@ -111,16 +110,14 @@ def student_make():
         try:
             s = Student()
             s.student_name = data['name']
-            if data['rfid'] == 'scan':
-                s.rfid = scan
-            else:
-                s.rfid = data['rfid']
+            s.rfid = data['rfid']
             db.session.add(s)
             db.session.commit()
             return "Student created successfully"
         except KeyError:
             return "Invalid JSON format"
     return "Couldn't create class - data 404"
+
 
 # RFID stuff
 @app.route("/api/rfid", methods=["POST"])
@@ -132,9 +129,10 @@ def rfid():
         if station:
             data = data['payload']
             student = Student.query.filter_by(uid=data['uid']).first()
-            if not student:
-                scan = data['uid']
-            else:
+            if station.scanning:
+                station.scanning = False
+                station.scan = data['uid']
+            elif station.linked_roll():
                 marking_instance = Roll_Student.query.filter_by(student_id=student.id, roll_id=station.linked_roll)
                 marking_instance.present = True
                 marking_instance.marked_at = datetime.now()
@@ -142,3 +140,12 @@ def rfid():
             return "Operation succsessful"
         return "Invalid auth details"
     return "No Json"
+
+@app.route("/api/get_rfid")
+@login_required
+def rfid_get():
+    if request.is_json:
+        data = request.get_json()
+        station = RFIDStation.query.get(data['rfid_id']).first_or_404()
+        return jsonify(station.get_scan())
+    return "input not json"

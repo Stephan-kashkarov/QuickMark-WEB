@@ -98,6 +98,8 @@ class RFIDStation(db.Model):
 	password_hash =   db.Column(db.String(128))
 	linked_roll =     db.Column(db.Integer, db.ForeignKey('roll.id'))
 	linked_roll_rel = db.relationship("Roll", back_populates="linked_rfid")
+	scan =            db.Column(db.Integer)
+	scanning =        db.Column(db.Boolean, default=False)
 
 	def __repr__(self):
 		return '<Station {}>'.format(self.name)
@@ -109,3 +111,6 @@ class RFIDStation(db.Model):
 	def check_password(self, password):
 		"""Checks a password against the hash."""
 		return check_password_hash(self.password_hash, password)
+
+	def get__scan(self):
+		return self.scan if not self.scanning else None
