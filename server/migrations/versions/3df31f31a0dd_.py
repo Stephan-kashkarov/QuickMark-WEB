@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 7dcef71bed14
+Revision ID: 3df31f31a0dd
 Revises: 
-Create Date: 2019-01-29 11:29:09.685069
+Create Date: 2019-02-06 17:57:36.862296
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7dcef71bed14'
+revision = '3df31f31a0dd'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,6 +21,7 @@ def upgrade():
     op.create_table('class',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=50), nullable=True),
+    sa.Column('desc', sa.String(length=200), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('person',
@@ -34,7 +35,7 @@ def upgrade():
     op.create_index(op.f('ix_person_username'), 'person', ['username'], unique=True)
     op.create_table('roll',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('date', sa.Date(), nullable=True),
+    sa.Column('time', sa.DateTime(), nullable=True),
     sa.Column('class_id', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
@@ -42,7 +43,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('student_id', sa.Integer(), nullable=True),
     sa.Column('student_name', sa.String(length=50), nullable=True),
-    sa.Column('rfid', sa.BLOB(), nullable=True),
+    sa.Column('rfid', sa.Integer(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('access',
@@ -64,6 +65,8 @@ def upgrade():
     sa.Column('name', sa.String(length=64), nullable=True),
     sa.Column('password_hash', sa.String(length=128), nullable=True),
     sa.Column('linked_roll', sa.Integer(), nullable=True),
+    sa.Column('scan', sa.Integer(), nullable=True),
+    sa.Column('scanning', sa.Boolean(), nullable=True),
     sa.ForeignKeyConstraint(['linked_roll'], ['roll.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
