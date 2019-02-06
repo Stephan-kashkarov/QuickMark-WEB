@@ -25,6 +25,7 @@
                     <label for="class-desc">Description</label>
                     <textarea rows="5" class="form-control" id="class-desc" placeholder="When/what is the class"></textarea>
                 </div>
+                <button class="btn btn-primary make-class-btn">Create!</button>
             </form>
         </div>
         <div class="col-8">
@@ -35,7 +36,7 @@
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <button 
-                        class="btn btn-outline-secondary dropdown-toggle"
+                        class="btn btn-outline-secondary dropdown-toggle search-name"
                         type="button"
                         data-toggle="dropdown"
                         aria-haspopup="true"
@@ -43,19 +44,43 @@
                     >
                         Name
                     </button>
-                    <div class="dropdown-menu">
+                    <div class="dropdown-menu search-choose-menu">
                         <a class="dropdown-item search-choose active" href="#">Name</a>
                         <a class="dropdown-item search-choose" href="#">Student ID</a>
                     </div>
                 </div>
                 <input type="text" class="form-control" aria-label="Text input with dropdown button">
             </div>
-            <div class="students row">
-                <div class="student card text-white mb-3 col" style="max-width: 11rem; min-width: 11rem;background-color: #343a40;">
+            <ul class="nav nav-tabs class-tabs">
+                <li class="nav-item">
+                    <a class="nav-link class-groups active" href="#">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link class-groups" href="#">Selected</a>
+                </li>
+            </ul>
+            <div class="students search-students row">
+                <div class="student card text-white mb-3 col">
                     <div class="card-body">
                         <h5 class="card-title">New Student</h5>
                         <p class="card-text">Click this card to Make new student</p>
                     </div>
+                </div>
+            </div>
+            <div class="students selected-students row">
+                Hello There!
+            </div>
+            <hr>
+            <div class="footer-student centered">
+                <p>Student not found? Maybe register them or try searching with rfid</p>
+                <div class="row">
+                    <div class="col centered">
+                        <button class="btn btn-primary register-student">Make new Student</button>
+                    </div>
+                    <div class="col centered">
+                        <button class="btn btn-primary rfid-search">Search with RFID</button>
+                    </div>
+
                 </div>
             </div>
         </div>

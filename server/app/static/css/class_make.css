@@ -1,0 +1,22 @@
+.centered {
+    text-align: center;
+}
+
+.students {
+    padding-top: 20px;
+    padding-left: 15px;
+    height: 50vh;
+}
+
+.student, .added-student{
+    max-width: 11rem;
+    min-width: 11rem;
+    height: 11rem;
+}
+.student {
+    background-color: #868e96;
+}
+
+.added-student {
+    background-color: #007bff;
+}
