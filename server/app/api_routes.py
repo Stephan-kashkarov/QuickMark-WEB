@@ -109,6 +109,7 @@ def student_make():
         data = request.get_json()
         try:
             s = Student()
+            s.student_id = data['id']
             s.student_name = data['name']
             s.rfid = data['rfid']
             db.session.add(s)
@@ -136,7 +137,6 @@ def rfid():
                 marking_instance = Roll_Student.query.filter_by(student_id=student.id, roll_id=station.linked_roll)
                 marking_instance.present = True
                 marking_instance.marked_at = datetime.now()
-
             return "Operation succsessful"
         return "Invalid auth details"
     return "No Json"

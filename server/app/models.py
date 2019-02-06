@@ -1,6 +1,6 @@
 from server.app import db, login
 from flask_login import UserMixin
-from datetime import date
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
 @login.user_loader
@@ -61,7 +61,7 @@ class Roll(db.Model):
 	__tablename__ = "roll"
 
 	id =       db.Column(db.Integer, primary_key=True)
-	date =     db.Column(db.Date, default=date.today())
+	time =     db.Column(db.DateTime, default=datetime.now())
 	class_id = db.Column(db.Integer)
 	roll =     db.relationship("Roll_Student", backref="roll", lazy="dynamic")
 	linked_rfid = db.relationship("RFIDStation", back_populates="linked_roll_rel")

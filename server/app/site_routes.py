@@ -17,9 +17,10 @@ def auth():
 def dash():
 	user = current_user
 	classes = [Class.query.get(x) for x in Access.query.filter_by(person_id=user.id)]
+	rolls = [Roll.query.filter_by(class_id=x.id) for x in classes]
 	if classes:
 		print(user, classes)
-	return render_template("dash.html", user=user, classes=classes)
+	return render_template("dash.html", user=user, classes=classes, rolls=rolls)
 
 
 @app.route("/class")
@@ -35,5 +36,5 @@ def class_id(c_id):
 @app.route("/class/make")
 @login_required
 def class_make():
-	return "WIP"
+	return render_template('class_make.html')
 

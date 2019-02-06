@@ -20,7 +20,7 @@
                 <p class="lead">You seem to not have created any classes yet</p>
                 <hr class="my-4">
                 <p>Creating a class is easy! try making one by clicking the button below</p>
-                <a class="btn btn-primary btn-lg class_create" href="#" role="button">Create Class</a>
+                <a class="btn btn-primary btn-lg class_create" href="{{url_for('class_make')}}" role="button">Create Class</a>
             {% else %}
             {% for class in classes %}
                 <div class="col-lg-3">
