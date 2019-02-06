@@ -1,20 +1,4 @@
-// See https://github.com/daneden/animate.css
-
-
-
-
-$(document).ready(function(){
-	$(".di").hover(function () {
-		$(this).css("font-size", "22.5px");
-		$(this).css("color", "#e5e5e5");
-		$(this).css("border-bottom", "3px solid ");
-	}, function () {
-		$(this).css("font-size", "22px");
-		$(this).css("color", "black");
-		$(this).css("border-bottom", "3px solid red");
-	});
-});
-	
+// See https://github.com/daneden/animate.css	
 	
 $.fn.extend({
 	animateCss: function (animationName, callback) {
@@ -53,6 +37,15 @@ $(function(){
 			window.location.reload()
 		})
 	})
+	$(".di").hover(function () {
+		$(this).css("font-size", "22.5px");
+		$(this).css("color", "#e5e5e5");
+		$(this).css("border-bottom", "3px solid ");
+	}, function () {
+		$(this).css("font-size", "22px");
+		$(this).css("color", "black");
+		$(this).css("border-bottom", "3px solid red");
+	});
 })
 
 

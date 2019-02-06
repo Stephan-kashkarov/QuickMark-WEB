@@ -1,21 +1,63 @@
 {% extends 'main.html' %}
 
 {% block scripts %}
-<script src="{{url_for('.static', filename='js/class_add.js')}}"></script>
+<script src="{{url_for('.static', filename='js/class_make.js')}}"></script>
 {% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{url_for('.static', filename='css/class_add.css')}}">
+<link rel="stylesheet" href="{{url_for('.static', filename='css/class_make.css')}}">
 {% endblock %}
 
 {% block body %}
 <div class="container">
     <div class="row">
-        <div class="col-8">
-            
-        </div>
         <div class="col-4">
-
+            <h3>
+                General Details
+            </h3>
+            <hr>
+            <form>
+                <div class="form-group">
+                    <label for="class-name">Name</label>
+                    <input type="text" class="form-control" id="class-name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <label for="class-desc">Description</label>
+                    <textarea rows="5" class="form-control" id="class-desc" placeholder="When/what is the class"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="col-8">
+            <h3>
+                Add Students
+            </h3>
+            <hr>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <button 
+                        class="btn btn-outline-secondary dropdown-toggle"
+                        type="button"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        Name
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item search-choose active" href="#">Name</a>
+                        <a class="dropdown-item search-choose" href="#">Student ID</a>
+                    </div>
+                </div>
+                <input type="text" class="form-control" aria-label="Text input with dropdown button">
+            </div>
+            <div class="students row">
+                <div class="student card text-white mb-3 col" style="max-width: 11rem; min-width: 11rem;background-color: #343a40;">
+                    <div class="card-body">
+                        <h5 class="card-title">New Student</h5>
+                        <p class="card-text">Click this card to Make new student</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
