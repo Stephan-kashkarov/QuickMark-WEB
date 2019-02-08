@@ -41,6 +41,12 @@ Credits:
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
+// MISC WIFI libs
+extern "C" {
+    #include "user_interface.h"
+    #include "c_types.h"
+}
+
 
 // Static defines
 #define RST_PIN 5
@@ -58,6 +64,7 @@ const int capacity = 3*JSON_OBJECT_SIZE(2);
 
 // Wifi & server variables
 const char* ssid = "BudiiLite-primary6537AF";
+const char* username = "1011998";
 const char* password = "*********";
 const char* host = "https://steph-rfid-quickmark.herokuapp.com/";
 
@@ -120,8 +127,24 @@ bool check_equal_vector(std::vector<byte> a, std::vector<byte> b)
 void wifi_init(const char* ssid, const char* password)
 {
 
-    WiFi.begin(ssid, password);
-
+    if (ssid == "EDU"){
+        Serial.printf("[WPA2 Enterprise: Attempting to setup connection to %s]\n", ssid);
+        
+        wifi_set_opmode(STATION_MODE);
+        struct station_config wifi_config;
+        memset(&wifi_config, 0, sizeof(wifi_config));
+        strcpy((char*)wifi_config.ssid, ssid);
+        wifi_station_set_config(&wifi_config);
+        wifi_station_clear_cert_key();
+        wifi_station_clear_enterprise_ca_cert();
+        wifi_station_set_wpa2_enterprise_auth(1);
+        wifi_station_set_enterprise_username((uint8*)username, strlen(username));
+        wifi_station_set_enterprise_password((uint8*)password, strlen(password));
+        wifi_station_connect();
+        Serial.printf("[WPA2 Enterprise: Setup Complete!]")
+    } else {
+        WiFi.begin(ssid, password);
+    }
     Serial.print("[WiFi: Connecting");
     while (WiFi.status() != WL_CONNECTED)
     {
