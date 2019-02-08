@@ -130,7 +130,7 @@ void wifi_init(const char* ssid, const char* password)
     if (ssid == "EDU"){
         Serial.printf("[WPA2 Enterprise: Attempting to setup connection to %s]\n", ssid);
         
-        wifi_set_opmode(STATION_MODE);
+        wifi_set_opmode(SOFTAP_MODE);
         struct station_config wifi_config;
         memset(&wifi_config, 0, sizeof(wifi_config));
         strcpy((char*)wifi_config.ssid, ssid);
@@ -140,12 +140,13 @@ void wifi_init(const char* ssid, const char* password)
         wifi_station_set_wpa2_enterprise_auth(1);
         wifi_station_set_enterprise_username((uint8*)username, strlen(username));
         wifi_station_set_enterprise_password((uint8*)password, strlen(password));
+        Serial.printf("[WPA2 Enterprise: Setup Complete!]");
+        Serial.print("[WiFi: Connecting");
         wifi_station_connect();
-        Serial.printf("[WPA2 Enterprise: Setup Complete!]")
     } else {
+        Serial.print("[WiFi: Connecting");
         WiFi.begin(ssid, password);
     }
-    Serial.print("[WiFi: Connecting");
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
