@@ -10,14 +10,20 @@ const student_card = ({
     </div>
 </div>
 `
+let students = []
+let temp_students = []
+let searchVal = "name"
 
 
 
 
 $(function(){
-    let students = []
-    let searchVal = "name"
     $(".selected-students").hide()
+
+    $(".changes-apply").on('click', () => {
+        students = temp_students.slice()
+        temp_students = []
+    })
 
     $(".student").on('mouseenter', function() {
         $(this).animate({
@@ -29,10 +35,10 @@ $(function(){
         }, 100)
     }).on('click', function() {
         $(this).animate({
-            backgroundColor: "#007bff",
+            backgroundColor: "#0067eb",
         }, 100)
         $(this).removeClass("student").addClass("added-student")
-        students.push(parseInt($(this).find('.id').text()))
+        temp_students.push(parseInt($(this).find('.student-id').text()))
     })
 
     $(".added-student").on('click', function(){
@@ -88,7 +94,13 @@ $(function(){
                 if (resp.status === 200 | resp.status === 201){
                     $(".search-students").empty()
                     JSON.parse(resp.responseText).map((id, student_id, name) => {
-                        $(".search-students").append({id, student_id, name}.map(student_card).join(""))
+                        $(".search-students").append(
+                            {
+                                id,
+                                student_id,
+                                name
+                            }.map(student_card).join("")
+                        )
                     })
                 } else {
                     $.notify({
