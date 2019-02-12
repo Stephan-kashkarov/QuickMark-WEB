@@ -120,6 +120,20 @@ def student_make():
     return "Couldn't create class - data 404"
 
 
+# DB Querying stuff
+@app.route("/api/db/student", methods=['POST'])
+def student_db():
+    if request.is_json:
+        data = request.get_json()
+        try:
+            if data["searchType"] == "Name":
+                return jsonify(Student.query.filter_by(student_name=data['searchVal']))
+            else:
+                return jsonify(Student.query.filter_by(student_id=data['searchVal']))
+        except KeyError:
+            return "Invalid JSON format", 400
+    return "Couldn't query - data 404", 404
+
 # RFID stuff
 @app.route("/api/rfid", methods=["POST"])
 def rfid():

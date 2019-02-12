@@ -86,10 +86,10 @@ $(function(){
                 data: jsonData,
             }).fail(function(resp){
                 if (resp.status === 200 | resp.status === 201){
-                $(".search-students").empty()
-                JSON.parse(resp.responseText).map((id, student_id, name) => {
-                    $(".search-students").append({id, student_id, name}.map(student_card).join(""))
-                })
+                    $(".search-students").empty()
+                    JSON.parse(resp.responseText).map((id, student_id, name) => {
+                        $(".search-students").append({id, student_id, name}.map(student_card).join(""))
+                    })
                 } else {
                     $.notify({
                         message: resp.responseText,
@@ -102,6 +102,65 @@ $(function(){
                         allow_dismiss: true,
                     })
                 }
+            })
+        }
+    })
+
+    $(".make-class-btn").on('click', () => {
+        if (
+            $("#class-name").val() &&
+            $("#class-desc").val() &&
+            students.length >= 1
+        ){
+            data = {
+                "title": $("#class-name").val(),
+                "desc": $("#class-desc").val(),
+                "students": students,
+            }
+            $.ajax({
+                type: "POST",
+                url: "/api/class/make",
+                contentType: 'application/json;charset=UTF-8',
+                dataType: 'jsonp',
+                data: data,
+            }).fail((resp) => {
+                if (resp.status === 200 | resp.status === 201) {
+                    $.notify({
+                        message: "Class created!, Redirecting!",
+                    }, {
+                        type: "success",
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        allow_dismiss: true,
+                    })
+                    setTimeout(2000, () => {
+                        window.location.pathname = "/dash"
+                    })
+                } else {
+                    $.notify({
+                        message: resp.responseText,
+                    }, {
+                        type: "danger",
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        allow_dismiss: true,
+                    })
+                }
+            })
+        } else {
+            $.notify({
+                message: "You have empty fields.<br> Do you have a title, description and atleast one student?",
+            }, {
+                type: "danger",
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                allow_dismiss: true,
             })
         }
     })
