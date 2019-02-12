@@ -1,4 +1,4 @@
-const student_cart = ({
+const student_card = ({
     id,
     student_id,
     student_name
@@ -70,5 +70,39 @@ $(function(){
         }
     })
 
-
+    $(".search-text-input").on("keyup", () => {
+        let searchType
+        let jsonData = {
+            "searchType": $(".search-choose-menu").find(".active").text(),
+            "searchVal": $(".search-choose-menu").find(".active").text(),
+        }
+        setTimeout(1000)
+        if (searchType === jsonData['searchType']){
+            $.ajax({
+                type: "POST",
+                url: "/api/db/query/students",
+                contentType: 'application/json;charset=UTF-8',
+                dataType: 'jsonp',
+                data: jsonData,
+            }).fail(function(resp){
+                if (resp.status === 200 | resp.status === 201){
+                $(".search-students").empty()
+                JSON.parse(resp.responseText).map((id, student_id, name) => {
+                    $(".search-students").append({id, student_id, name}.map(student_card).join(""))
+                })
+                } else {
+                    $.notify({
+                        message: resp.responseText,
+                    }, {
+                        type: "danger",
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        allow_dismiss: true,
+                    })
+                }
+            })
+        }
+    })
 })
