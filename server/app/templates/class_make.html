@@ -49,7 +49,7 @@
                         <a class="dropdown-item search-choose" href="#">Student ID</a>
                     </div>
                 </div>
-                <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="Search for results">
             </div>
             <ul class="nav nav-tabs class-tabs">
                 <li class="nav-item">
@@ -60,25 +60,37 @@
                 </li>
             </ul>
             <div class="students search-students row">
+                {% for student in students %}
                 <div class="student card text-white mb-3 col">
                     <div class="card-body">
-                        <h5 class="card-title">New Student</h5>
-                        <p class="card-text">Click this card to Make new student</p>
+                        <h5 class="card-title student-id">{{student.id}}</h5>
+                        <p class="card-text">{{student.student_id}}<br>{{student.student_name}}</p>
                     </div>
                 </div>
+                {% endfor %}
             </div>
             <div class="students selected-students row">
-                Hello There!
+                {% for student in students_edit %}
+                <div class="student card text-white mb-3 col">
+                    <div class="card-body">
+                        <h5 class="card-title student-id">{{student.id}}</h5>
+                        <p class="card-text">{{student.student_id}}<br>{{student.student_name}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="centered">
+                <button class="btn btn-primary centered changes-apply">Apply Changes!</button>
             </div>
             <hr>
             <div class="footer-student centered">
                 <p>Student not found? Maybe register them or try searching with rfid</p>
                 <div class="row">
                     <div class="col centered">
-                        <button class="btn btn-primary register-student">Make new Student</button>
+                        <button class="btn btn-secondary register-student">Make new Student</button>
                     </div>
                     <div class="col centered">
-                        <button class="btn btn-primary rfid-search">Search with RFID</button>
+                        <button class="btn btn-secondary rfid-search">Search with RFID</button>
                     </div>
 
                 </div>

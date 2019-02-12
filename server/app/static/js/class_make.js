@@ -1,3 +1,19 @@
+const student_cart = ({
+    id,
+    student_id,
+    student_name
+}) => `
+<div class="student card text-white mb-3 col">
+    <div class="card-body">
+        <h5 class="card-title student-id">${id}</h5>
+        <p class="card-text">${student_id}<br>${student_name}</p>
+    </div>
+</div>
+`
+
+
+
+
 $(function(){
     let students = []
     let searchVal = "name"
