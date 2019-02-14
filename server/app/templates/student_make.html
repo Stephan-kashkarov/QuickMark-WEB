@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+
+{% block scripts %}
+<script src="{{url_for('.static', filename='js/class_make.js')}}"></script>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{url_for('.static', filename='css/class_make.css')}}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Make a new Student!</h1>
+    <hr>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary" type="button" id="button-student-check">Check</button>
+        </div>
+        <input type="text" class="form-control" placeholder="Student ID" aria-label="Example text with button addon" aria-describedby="button-addon1">
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Student Name">
+    </div> 
+    <hr>
+    <div class="jumbotron">
+        <h1 class="display-4">Get RFID</h1>
+        <hr class="my-4">
+        <p>
+            Please select your RFID station and scan the students student ID
+            (This only works if the card is half myway)
+        </p>
+            <button
+                class="btn btn-outline-secondary dropdown-toggle"
+                type="button" 
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false">
+                Select RFID
+            </button>
+            <div class="dropdown-menu">
+                {% if stations %}
+                {% for stationID, stationName in stations %}
+                    <a class="dropdown-item" id="{{stationID}}" class="station" href="">{{stationName}} - {{stationID}}</a>
+                {% endfor %}
+                {% else %}
+                    <a class="dropdown-item disabled" class="station" href="">No Stations available</a>
+                {% endif %}
+            </div>
+            <button class="btn btn-outline-secondary" type="button">
+                Get RFID
+            </button>
+    </div>
+</div>
+{% endblock %}

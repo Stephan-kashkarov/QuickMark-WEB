@@ -118,7 +118,8 @@ $(function(){
         }
     })
 
-    $(".make-class-btn").on('click', () => {
+    $(".make-class-btn").on('click', function(e) {
+        e.preventDefault()
         if (
             $("#class-name").val() &&
             $("#class-desc").val() &&

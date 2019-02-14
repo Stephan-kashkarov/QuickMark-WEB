@@ -104,7 +104,7 @@ def class_gen():
 
 @app.route("/api/student/make", methods=["POST"])
 @login_required
-def student_make():
+def student_gen():
     if request.is_json:
         data = request.get_json()
         try:

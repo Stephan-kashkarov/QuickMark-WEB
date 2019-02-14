@@ -1,6 +1,6 @@
 from server.app import app, db
 from flask import redirect, url_for, flash, render_template, request
-from server.app.models import Class, Roll, Student, Person , Access
+from server.app.models import Class, Roll, Student, Person, Access, RFIDStation
 
 from flask_login import current_user, login_user, login_required, logout_user
 
@@ -37,4 +37,9 @@ def class_id(c_id):
 @login_required
 def class_make():
 	return render_template('class_make.html')
+
+@app.route("/student/make")
+@login_required
+def student_make():
+	return render_template('student_make.html', stations=RFIDStation.query.all())
 
