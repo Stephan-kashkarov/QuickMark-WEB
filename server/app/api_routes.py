@@ -125,6 +125,7 @@ def student_gen():
 def student_db():
     if request.is_json:
         data = request.get_json()
+        print(data)
         try:
             if data["searchType"] == "Name":
                 return jsonify(Student.query.filter_by(student_name=data['searchVal']))
@@ -155,11 +156,13 @@ def rfid():
         return "Invalid auth details"
     return "No Json"
 
-@app.route("/api/get_rfid")
+
+@app.route("/api/get_rfid", methods=["POST"])
 @login_required
 def rfid_get():
     if request.is_json:
         data = request.get_json()
+        print(data)
         station = RFIDStation.query.get(data['rfid_id']).first_or_404()
         if not station.scanning and not station.scan:
             station.scanning = True

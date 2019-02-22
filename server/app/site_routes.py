@@ -41,5 +41,5 @@ def class_make():
 @app.route("/student/make")
 @login_required
 def student_make():
-	return render_template('student_make.html', stations=RFIDStation.query.all())
+	return render_template('student_make.html', stations=[(x.id, x.name) for x in RFIDStation.query.all()])
 

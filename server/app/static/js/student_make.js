@@ -1,4 +1,6 @@
 $(() => {
+    const timer = new TaskTimer(2000)
+    let check
     $("#button-student-check").on('click', () => {
         $.ajax({
             type: "POST",
@@ -37,27 +39,41 @@ $(() => {
     })
 
     $(".search-station").on("click", () => {
-        let check = setInterval(() => {
-            $.ajax({
-                type: "POST",
-                url: "/api/get_rfid",
-                contentType: 'application/json;charset=UTF-8',
-                dataType: 'jsonp',
-                data: JSON.stringify({
-                    "rfid_id": $(".dropdown-rfid").find('active').attr('id')
-                }),
-            })
-        }, 2000)
-        $(".search-station")
-        .removeClass("search-station")
-        .addClass("searching-station")
-        .text("Cancel")
-        .on('click', () => {
-            window.clearInterval(check)
-            $(".searching-station")
-            .removeClass("searching-station")
-            .addClass("search-station")
-            .text("Get RFID")
-        })
+        let id = $(".dropdown-rfid").find('active').attr('id')
+        if (Boolean(id)){
+            check = setInterval(() => {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/get_rfid",
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify({
+                        "rfid_id": id
+                    }),
+                }).fail((resp) => {
+                    $.notify({
+                        message: resp.responseText,
+                    }, {
+                        type: "info",
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp',
+                        },
+                        allow_dismiss: true,
+                    })
+                })
+            }, 2000)
+            $(".search-station")
+                .removeClass("search-station")
+                .addClass("searching-station")
+                .text("Cancel")
+                .on('click', () => {
+                    clearInterval(check)
+                    $(".searching-station")
+                        .removeClass("searching-station")
+                        .addClass("search-station")
+                        .text("Get RFID")
+                }
+            )
+        }
     })
 })

@@ -10,9 +10,11 @@ def context():
 	every model in the database
 	"""
 	return {
+		'app': app,
 		'db': db,
 		'Person': Person,
 		'Class': Class,
 		'Student': Student,
-		'Roll': Roll
+		'Roll': Roll,
+		'RFIDStation': RFIDStation,
 	}
