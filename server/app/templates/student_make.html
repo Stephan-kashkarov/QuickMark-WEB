@@ -1,11 +1,11 @@
 {% extends 'main.html' %}
 
 {% block scripts %}
-<script src="{{url_for('.static', filename='js/class_make.js')}}"></script>
+<script src="{{url_for('.static', filename='js/student_make.js')}}"></script>
 {% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{{url_for('.static', filename='css/class_make.css')}}">
+<link rel="stylesheet" href="{{url_for('.static', filename='css/student_make.css')}}">
 {% endblock %}
 
 {% block body %}
@@ -16,7 +16,7 @@
         <div class="input-group-prepend">
             <button class="btn btn-outline-secondary" type="button" id="button-student-check">Check</button>
         </div>
-        <input type="text" class="form-control" placeholder="Student ID" aria-label="Example text with button addon" aria-describedby="button-addon1">
+        <input id="student-id" type="text" class="form-control" placeholder="Student ID" aria-label="Example text with button addon" aria-describedby="button-addon1">
     </div>
     <div class="input-group mb-3">
         <input type="text" class="form-control" placeholder="Student Name">
@@ -37,16 +37,17 @@
                 aria-expanded="false">
                 Select RFID
             </button>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu dropdown-rfid">
                 {% if stations %}
                 {% for stationID, stationName in stations %}
-                    <a class="dropdown-item" id="{{stationID}}" class="station" href="">{{stationName}} - {{stationID}}</a>
+                <a class="dropdown-item" id="{{stationID}}" class="station" href="">{{stationName}} - {{stationID}}</a>
                 {% endfor %}
                 {% else %}
-                    <a class="dropdown-item disabled" class="station" href="">No Stations available</a>
+                <a class="dropdown-item disabled" class="station" href="">No Stations available</a>
+                <a class="dropdown-item refresh" class="station" href="">Refresh Stations</a>
                 {% endif %}
             </div>
-            <button class="btn btn-outline-secondary" type="button">
+            <button class="btn btn-outline-secondary search-station" type="button">
                 Get RFID
             </button>
     </div>

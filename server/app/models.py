@@ -112,5 +112,5 @@ class RFIDStation(db.Model):
 		"""Checks a password against the hash."""
 		return check_password_hash(self.password_hash, password)
 
-	def get__scan(self):
+	def get_scan(self):
 		return self.scan if not self.scanning else None
