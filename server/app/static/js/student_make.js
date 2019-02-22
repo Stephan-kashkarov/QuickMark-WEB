@@ -1,6 +1,9 @@
 $(() => {
-    const timer = new TaskTimer(2000)
-    let check
+
+    // Globals ahhhhh!
+    let choose = 0
+
+    // check for Student function
     $("#button-student-check").on('click', () => {
         $.ajax({
             type: "POST",
@@ -38,10 +41,11 @@ $(() => {
         })
     })
 
+    // Get RFID function
     $(".search-station").on("click", () => {
-        let id = $(".dropdown-rfid").find('active').attr('id')
+        let id = $(".dropdown-rfid").find('.active').attr('id')
         if (Boolean(id)){
-            check = setInterval(() => {
+            choose = window.setInterval(() => {
                 $.ajax({
                     type: "POST",
                     url: "/api/get_rfid",
@@ -67,12 +71,40 @@ $(() => {
                 .addClass("searching-station")
                 .text("Cancel")
                 .on('click', () => {
-                    clearInterval(check)
+                    window.clearInterval(choose)
                     $(".searching-station")
                         .removeClass("searching-station")
                         .addClass("search-station")
                         .text("Get RFID")
                 }
+            )
+        } else {
+            $.notify({
+                message: "Please Select station",
+            }, {
+                type: "warning",
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp',
+                },
+                allow_dismiss: true,
+            })
+        }
+    })
+
+    // Station select
+    $(".station-choose").on('click', function (e) {
+        e.preventDefault()
+        if ($(this).hasClass("active")){
+            $(".dropdown-button-station").text("Select RFID")
+            $(this).removeClass("active")
+        } else {
+            $(".dropdown-rfid")
+                .find('.active')
+                .removeClass('active')
+            $(this).addClass('active')            
+            $(".dropdown-button-station").text(
+                $(this).text()
             )
         }
     })

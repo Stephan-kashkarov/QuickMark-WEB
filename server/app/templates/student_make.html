@@ -30,7 +30,7 @@
             (This only works if the card is half myway)
         </p>
             <button
-                class="btn btn-outline-secondary dropdown-toggle"
+                class="btn btn-outline-secondary dropdown-toggle dropdown-button-station"
                 type="button" 
                 data-toggle="dropdown"
                 aria-haspopup="true"
@@ -40,11 +40,11 @@
             <div class="dropdown-menu dropdown-rfid">
                 {% if stations %}
                 {% for stationID, stationName in stations %}
-                <a class="dropdown-item" id="{{stationID}}" class="station" href="">{{stationName}} - {{stationID}}</a>
+                <a class="dropdown-item station-choose" id="{{stationID}}" href="">{{stationName}} - {{stationID}}</a>
                 {% endfor %}
                 {% else %}
-                <a class="dropdown-item disabled" class="station" href="">No Stations available</a>
-                <a class="dropdown-item refresh" class="station" href="">Refresh Stations</a>
+                <a class="dropdown-item disabled" href="">No Stations available</a>
+                <a class="dropdown-item refresh" href="">Refresh Stations</a>
                 {% endif %}
             </div>
             <button class="btn btn-outline-secondary search-station" type="button">

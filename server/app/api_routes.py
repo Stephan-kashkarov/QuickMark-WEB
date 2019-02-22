@@ -163,12 +163,12 @@ def rfid_get():
     if request.is_json:
         data = request.get_json()
         print(data)
-        station = RFIDStation.query.get(data['rfid_id']).first_or_404()
+        station = RFIDStation.query.get_or_404(data['rfid_id'])
         if not station.scanning and not station.scan:
             station.scanning = True
-            return "Scanning"
+            return jsonify("Scanning")
         elif station.scan:
             return jsonify(station.get_scan()) 
-        return "Starting scan"
+        return jsonify("Starting scan")
 
     return "input not json"
