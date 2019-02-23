@@ -45,7 +45,7 @@ $(() => {
     $(".search-station").on("click", () => {
         let id = $(".dropdown-rfid").find('.active').attr('id')
         if (Boolean(id)){
-            choose = window.setInterval(() => {
+            let choose = setInterval(() => {
                 $.ajax({
                     type: "POST",
                     url: "/api/get_rfid",
@@ -70,14 +70,6 @@ $(() => {
                 .removeClass("search-station")
                 .addClass("searching-station")
                 .text("Cancel")
-                .on('click', () => {
-                    window.clearInterval(choose)
-                    $(".searching-station")
-                        .removeClass("searching-station")
-                        .addClass("search-station")
-                        .text("Get RFID")
-                }
-            )
         } else {
             $.notify({
                 message: "Please Select station",
@@ -90,6 +82,14 @@ $(() => {
                 allow_dismiss: true,
             })
         }
+    })
+
+    $(".search-station").on('click', () => {
+        clearInterval(choose)
+        $(".searching-station")
+            .removeClass("searching-station")
+            .addClass("search-station")
+            .text("Get RFID")
     })
 
     // Station select

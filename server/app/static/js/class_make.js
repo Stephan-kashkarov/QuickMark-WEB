@@ -177,4 +177,8 @@ $(function(){
             })
         }
     })
+
+    $(".register-student").on('click', () => {
+        window.location.pathname = "/student/make"
+    })
 })
