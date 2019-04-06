@@ -86,6 +86,7 @@ $(() => { // document ready
         }
     })
 
+    // Cancle button
     $(document).on('click', ".searching-station", () => {
         console.log(`Clearing: ${choose}`)
         clearInterval(choose)
