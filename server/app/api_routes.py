@@ -128,9 +128,9 @@ def student_db():
         print(data)
         try:
             if data["searchType"] == "Name":
-                return jsonify(Student.query.filter_by(student_name=data['searchVal']))
+                return jsonify(Student.query.filter_by(student_name=data['searchVal']).first_or_404())
             else:
-                return jsonify(Student.query.filter_by(student_id=data['searchVal']))
+                return jsonify(Student.query.filter_by(student_id=data['searchVal']).first_or_404())
         except KeyError:
             return "Invalid JSON format", 400
     return "Couldn't query - data 404", 404

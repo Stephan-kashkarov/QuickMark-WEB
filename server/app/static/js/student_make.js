@@ -1,4 +1,4 @@
-$(() => {
+$(() => { // document ready
 
     // Globals ahhhhh!
     let choose = 0
@@ -42,10 +42,11 @@ $(() => {
     })
 
     // Get RFID function
-    $(".search-station").on("click", () => {
+    $(document).on("click", ".search-station", () => {
         let id = $(".dropdown-rfid").find('.active').attr('id')
         if (Boolean(id)){
-            let choose = setInterval(() => {
+            console.log(`Choose was ${choose}`)
+            choose = setInterval(() => {
                 $.ajax({
                     type: "POST",
                     url: "/api/get_rfid",
@@ -66,6 +67,7 @@ $(() => {
                     })
                 })
             }, 2000)
+            console.log(`Choose is ${choose}`)
             $(".search-station")
                 .removeClass("search-station")
                 .addClass("searching-station")
@@ -84,7 +86,8 @@ $(() => {
         }
     })
 
-    $(".search-station").on('click', () => {
+    $(document).on('click', ".searching-station", () => {
+        console.log(`Clearing: ${choose}`)
         clearInterval(choose)
         $(".searching-station")
             .removeClass("searching-station")
@@ -93,7 +96,7 @@ $(() => {
     })
 
     // Station select
-    $(".station-choose").on('click', function (e) {
+    $(document).on('click', ".station-choose", function (e) {
         e.preventDefault()
         if ($(this).hasClass("active")){
             $(".dropdown-button-station").text("Select RFID")
