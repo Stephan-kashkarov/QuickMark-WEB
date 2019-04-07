@@ -40,7 +40,10 @@ def authStation(s_id, password):
         return station
     return False
 
-# Auth stuff
+################################################################
+####################### Auth stuff #############################
+################################################################
+
 @app.route("/api/auth/login", methods=["POST"])
 def login():
     if request.is_json:
@@ -76,7 +79,9 @@ def logout():
     return "Logout Succsesful"
 
 
-# Class Stuff
+################################################################
+###################### Create stuff ############################
+################################################################
 
 @app.route("/api/class/make", methods=["POST"])
 @login_required
@@ -117,25 +122,33 @@ def student_gen():
             return "Student created successfully"
         except KeyError:
             return "Invalid JSON format"
-    return "Couldn't create class - data 404"
+    return "Couldn't create student - data 404"
 
 
-# DB Querying stuff
-@app.route("/api/db/student", methods=['POST'])
-def student_db():
+################################################################
+######################## DB stuff ##############################
+################################################################
+
+@app.route("/api/db/query/<class_name>", methods=['POST'])
+def student_db(class_name):
     if request.is_json:
         data = request.get_json()
         print(data)
         try:
-            if data["searchType"] == "Name":
-                return jsonify(Student.query.filter_by(student_name=data['searchVal']).first_or_404())
-            else:
-                return jsonify(Student.query.filter_by(student_id=data['searchVal']).first_or_404())
+            model = eval(class_name)
+            key = eval(data['key'])
+            value = eval(data['val'])
+            return jsonify(model.query.filter_by(key=value).all()), 200
         except KeyError:
             return "Invalid JSON format", 400
     return "Couldn't query - data 404", 404
 
-# RFID stuff
+
+
+################################################################
+####################### RFID stuff #############################
+################################################################
+
 @app.route("/api/rfid", methods=["POST"])
 def rfid():
     data = request.get_json()
@@ -164,11 +177,12 @@ def rfid_get():
         data = request.get_json()
         print(data)
         station = RFIDStation.query.get_or_404(data['rfid_id'])
-        if not station.scanning and not station.scan:
+        if station.scanning and not station.scan:
             station.scanning = True
-            return jsonify("Scanning")
+            return "Scanning", 404
         elif station.scan:
-            return jsonify(station.get_scan()) 
-        return jsonify("Starting scan")
+            station.scanning = False
+            return jsonify(station.get_scan()), 201
+        return jsonify("Starting scan"), 200
 
     return "input not json"

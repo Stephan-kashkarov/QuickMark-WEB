@@ -17,8 +17,9 @@ let searchVal = "name"
 
 
 
-$(function(){
-    $(".selected-students").hide()
+$(() => {
+
+    $(".selected-students").hide() // hides second tab
 
     $(".changes-apply").on('click', () => {
         students = temp_students.slice()
@@ -63,59 +64,38 @@ $(function(){
         $(".search-choose-menu").find('.active').removeClass('active')
         $(this).addClass('active')
         $('.search-name').text($(this).text())
-        switch ($(this).text()) {
-            case "Name":
-                searchVal = "name"
-                break;
-            case "Student ID":
-                searchVal = "id"
-                break;
-        
-            default:
-                break;
-        }
     })
 
     $(".search-text-input").on("keyup", () => {
-        let searchType
-        let jsonData = {
-            "searchType": $(".search-choose-menu").find(".active").text(),
-            "searchVal": $(".search-choose-menu").find(".active").text(),
+        console.log("TYPETYPE")
+
+        // Clear all timeouts
+        for (i = 0; i < 100; i++) {
+            window.clearTimeout(i);
         }
-        setTimeout(1000)
-        if (searchType === jsonData['searchType']){
+
+        setTimeout(() => {
+            let active_search = ($("#name-selected").hasClass("active"))
+                ? "student_name"
+                : "student_id"
             $.ajax({
                 type: "POST",
-                url: "/api/db/query/students",
                 contentType: 'application/json;charset=UTF-8',
-                dataType: 'jsonp',
-                data: jsonData,
-            }).fail(function(resp){
-                if (resp.status === 200 | resp.status === 201){
-                    $(".search-students").empty()
-                    JSON.parse(resp.responseText).map((id, student_id, name) => {
-                        $(".search-students").append(
-                            {
-                                id,
-                                student_id,
-                                name
-                            }.map(student_card).join("")
-                        )
-                    })
-                } else {
-                    $.notify({
-                        message: resp.responseText,
-                    }, {
-                        type: "danger",
-                        animate: {
-                            enter: 'animated fadeInDown',
-                            exit: 'animated fadeOutUp'
-                        },
-                        allow_dismiss: true,
-                    })
-                }
+                url: "/api/db/query/Student",
+                data: JSON.stringify({
+                    "key": `Student.${active_search}`,
+                    "val": $(".search-text-input").val(),
+                })
+            }).fail((resp) => {
+                console.log(`UPDATING WITH:\n${resp.responseText}`)
+                $(".search-students").empty()
+                JSON.parse(resp.responseText).map((student) => {
+                    $(".search-student").append(
+                        student.map(student_card).join("")
+                    )
+                })
             })
-        }
+        }, 1000)
     })
 
     $(".make-class-btn").on('click', function(e) {
