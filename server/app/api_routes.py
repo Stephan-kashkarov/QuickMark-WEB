@@ -160,7 +160,7 @@ def student_db(class_name):
             ]
             print(f"The result of query: {query}")
             return jsonify(
-                json_list=query
+                query
             ), 200
         except KeyError:
             return "Invalid JSON format", 400

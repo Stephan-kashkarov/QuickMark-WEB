@@ -8,19 +8,15 @@ def load_user(id):
 	"""User loader for flask login."""
 	return Person.query.get(int(id))
 
-class Base_model(db.Model):
-	
-	def as_dict(self):
-		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 # INTERMIDEARY TABLES
-class Access(Base_model):
+class Access(db.Model):
 	__tablename__ = "access"
 
 	person_id = db.Column(db.Integer, db.ForeignKey("person.id"), primary_key=True)
 	class_id =  db.Column(db.Integer, db.ForeignKey("class.id"), primary_key=True)
 
-class Roll_Student(Base_model):
+class Roll_Student(db.Model):
 	__tablename__ = "roll_student"
 	extend_existing = True
 	roll_id =    db.Column(db.Integer, db.ForeignKey("roll.id"), primary_key=True)
@@ -28,7 +24,7 @@ class Roll_Student(Base_model):
 	present =    db.Column(db.Boolean, default=False)
 	marked_at =  db.Column(db.DateTime, default=None)
 
-class Class_Student(Base_model):
+class Class_Student(db.Model):
 	__tablename__ = "class_student"
 
 	roll_id = db.Column(db.Integer, db.ForeignKey("class.id"), primary_key=True)
@@ -36,7 +32,7 @@ class Class_Student(Base_model):
 
 
 # DATA TABLES
-class Class(Base_model):
+class Class(db.Model):
 	__tablename__ = "class"
 
 	id =           db.Column(db.Integer, primary_key=True)
@@ -49,7 +45,7 @@ class Class(Base_model):
 		return "<Class: {}>".format(self.title)
 
 
-class Student(Base_model):
+class Student(db.Model):
 	__tablename__ = "student"
 
 	id =           db.Column(db.Integer, primary_key=True)
@@ -65,7 +61,7 @@ class Student(Base_model):
 		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
-class Roll(Base_model):
+class Roll(db.Model):
 	__tablename__ = "roll"
 
 	id =       db.Column(db.Integer, primary_key=True)
@@ -74,11 +70,14 @@ class Roll(Base_model):
 	roll =     db.relationship("Roll_Student", backref="roll", lazy="dynamic")
 	linked_rfid = db.relationship("RFIDStation", back_populates="linked_roll_rel")
 
+	def as_dict(self):
+		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 	def __repr__(self):
 		return "<Roll object Student: {} is in Class: {}>".format(self.student_id, self.class_id)
 
 # USER TABLES
-class Person(Base_model, UserMixin):
+class Person(db.Model, UserMixin):
 	__tablename__ = "person"
 
 	id =            db.Column(db.Integer, primary_key=True)
@@ -99,7 +98,7 @@ class Person(Base_model, UserMixin):
 		"""Checks a password against the hash."""
 		return check_password_hash(self.password_hash, password)
 
-class RFIDStation(Base_model):
+class RFIDStation(db.Model):
 	__tablename__ = "rfid_station"
 	id =              db.Column(db.Integer, primary_key=True)
 	name =            db.Column(db.String(64))
@@ -108,6 +107,9 @@ class RFIDStation(Base_model):
 	linked_roll_rel = db.relationship("Roll", back_populates="linked_rfid")
 	scan =            db.Column(db.Integer)
 	scanning =        db.Column(db.Boolean, default=False)
+
+	def as_dict(self):
+		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 	def __repr__(self):
 		return '<Station {}>'.format(self.name)

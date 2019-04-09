@@ -22,19 +22,19 @@ $(() => {
     $(".selected-students").hide() // hides second tab
 
     $(".changes-apply").on('click', () => {
-        students = temp_students.slice()
+        students.push(temp_students.slice())
         temp_students = []
     })
 
-    $(".student").on('mouseenter', function() {
+    $(document).on('mouseenter', ".student", function () {
         $(this).animate({
             backgroundColor: "#007bff",
         }, 100)
-    }).on('mouseleave', function() {
+    }).on('mouseleave', ".student", function () {
         $(this).animate({
             backgroundColor: "#868e96",
         }, 100)
-    }).on('click', function() {
+    }).on('click', ".student", function () {
         $(this).animate({
             backgroundColor: "#0067eb",
         }, 100)
@@ -78,22 +78,19 @@ $(() => {
             let active_search = ($("#name-selected").hasClass("active"))
                 ? "student_name"
                 : "student_id"
-            $.ajax({
+            let resp = $.ajax({
                 type: "POST",
                 contentType: 'application/json;charset=UTF-8',
                 url: "/api/db/query/Student",
                 data: JSON.stringify({
                     "key": `Student.${active_search}`,
                     "val": $(".search-text-input").val(),
-                })
-            }).fail((resp) => {
-                console.log(`UPDATING WITH:\n${resp.responseText}`)
-                $(".search-students").empty()
-                JSON.parse(resp.responseText).map((student) => {
-                    $(".search-student").append(
-                        student.map(student_card).join("")
-                    )
-                })
+                }),
+                async: false,
+            })
+            $(".search-students").empty()
+            JSON.parse(resp.responseText).map((student) => {
+                $(".search-students").append([student].map(student_card).join(""))
             })
         }, 1000)
     })
