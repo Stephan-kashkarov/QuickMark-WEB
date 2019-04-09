@@ -32,6 +32,22 @@ from server.app.models import (
     Access,
 )
 
+import server.app.models as models
+
+
+model_dict = {
+    str(y).lower() if y else None: eval(y) if y else None for y in set(
+        [
+            x
+            if not x.startswith("_")
+            and x[0].isupper()
+            and x not in ['UserMixin']
+            else None
+            for x in dir(models)
+        ]
+    )
+}
+
 from datetime import datetime
 
 def authStation(s_id, password):
@@ -135,10 +151,17 @@ def student_db(class_name):
         data = request.get_json()
         print(data)
         try:
-            model = eval(class_name)
-            key = eval(data['key'])
-            value = eval(data['val'])
-            return jsonify(model.query.filter_by(key=value).all()), 200
+            query = [
+                x.as_dict() for x in model_dict[
+                    class_name.lower()
+                ].query.filter(
+                    eval(data['key']).contains(data['val'])
+                ).all()
+            ]
+            print(f"The result of query: {query}")
+            return jsonify(
+                json_list=query
+            ), 200
         except KeyError:
             return "Invalid JSON format", 400
     return "Couldn't query - data 404", 404

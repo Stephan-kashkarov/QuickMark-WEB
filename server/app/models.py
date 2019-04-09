@@ -8,14 +8,19 @@ def load_user(id):
 	"""User loader for flask login."""
 	return Person.query.get(int(id))
 
+class Base_model(db.Model):
+	
+	def as_dict(self):
+		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
 # INTERMIDEARY TABLES
-class Access(db.Model):
+class Access(Base_model):
 	__tablename__ = "access"
 
 	person_id = db.Column(db.Integer, db.ForeignKey("person.id"), primary_key=True)
 	class_id =  db.Column(db.Integer, db.ForeignKey("class.id"), primary_key=True)
 
-class Roll_Student(db.Model):
+class Roll_Student(Base_model):
 	__tablename__ = "roll_student"
 	extend_existing = True
 	roll_id =    db.Column(db.Integer, db.ForeignKey("roll.id"), primary_key=True)
@@ -23,7 +28,7 @@ class Roll_Student(db.Model):
 	present =    db.Column(db.Boolean, default=False)
 	marked_at =  db.Column(db.DateTime, default=None)
 
-class Class_Student(db.Model):
+class Class_Student(Base_model):
 	__tablename__ = "class_student"
 
 	roll_id = db.Column(db.Integer, db.ForeignKey("class.id"), primary_key=True)
@@ -31,7 +36,7 @@ class Class_Student(db.Model):
 
 
 # DATA TABLES
-class Class(db.Model):
+class Class(Base_model):
 	__tablename__ = "class"
 
 	id =           db.Column(db.Integer, primary_key=True)
@@ -44,7 +49,7 @@ class Class(db.Model):
 		return "<Class: {}>".format(self.title)
 
 
-class Student(db.Model):
+class Student(Base_model):
 	__tablename__ = "student"
 
 	id =           db.Column(db.Integer, primary_key=True)
@@ -56,8 +61,11 @@ class Student(db.Model):
 	def __repr__(self):
 		return "<Student, id: {}, name: {}, dbId: {}>".format(self.student_id, self.student_name, self.id)
 
+	def as_dict(self):
+		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-class Roll(db.Model):
+
+class Roll(Base_model):
 	__tablename__ = "roll"
 
 	id =       db.Column(db.Integer, primary_key=True)
@@ -70,7 +78,7 @@ class Roll(db.Model):
 		return "<Roll object Student: {} is in Class: {}>".format(self.student_id, self.class_id)
 
 # USER TABLES
-class Person(db.Model, UserMixin):
+class Person(Base_model, UserMixin):
 	__tablename__ = "person"
 
 	id =            db.Column(db.Integer, primary_key=True)
@@ -91,7 +99,7 @@ class Person(db.Model, UserMixin):
 		"""Checks a password against the hash."""
 		return check_password_hash(self.password_hash, password)
 
-class RFIDStation(db.Model):
+class RFIDStation(Base_model):
 	__tablename__ = "rfid_station"
 	id =              db.Column(db.Integer, primary_key=True)
 	name =            db.Column(db.String(64))
