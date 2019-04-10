@@ -101,7 +101,7 @@ $(() => {
         for (i = 0; i < 100; ++i) {
             window.clearTimeout(i);
         }
-        setTimeout(updateThings(), 1000)
+        setTimeout(updateThings(), 4000)
     })
 
     $(".make-class-btn").on('click', function(e) {
