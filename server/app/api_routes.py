@@ -34,7 +34,7 @@ from server.app.models import (
 
 import server.app.models as models
 
-
+# ugly code to make a string to class table
 model_dict = {
     str(y).lower() if y else None: eval(y) if y else None for y in set(
         [
@@ -149,8 +149,9 @@ def student_gen():
 def student_db(class_name):
     if request.is_json:
         data = request.get_json()
-        print(data)
         try:
+            # Sorry for this monstrosity
+            # i just wanted to make a generalised view
             query = [
                 x.as_dict() for x in model_dict[
                     class_name.lower()
@@ -158,7 +159,6 @@ def student_db(class_name):
                     eval(data['key']).contains(data['val'])
                 ).all()
             ]
-            print(f"The result of query: {query}")
             return jsonify(
                 query
             ), 200
