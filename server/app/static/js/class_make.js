@@ -41,7 +41,11 @@ function updateThings() {
 
 
 $(() => {
-    updateThings()
+    try {
+        updateThings()
+    }
+    catch (e) {}
+
     $(".selected-students").hide() // hides second tab
 
     $(".changes-apply").on('click', () => {

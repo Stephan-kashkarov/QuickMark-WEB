@@ -57,8 +57,6 @@ class Student(db.Model):
 	def __repr__(self):
 		return "<Student, id: {}, name: {}, dbId: {}>".format(self.student_id, self.student_name, self.id)
 
-	def as_dict(self):
-		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Roll(db.Model):
@@ -70,8 +68,6 @@ class Roll(db.Model):
 	roll =     db.relationship("Roll_Student", backref="roll", lazy="dynamic")
 	linked_rfid = db.relationship("RFIDStation", back_populates="linked_roll_rel")
 
-	def as_dict(self):
-		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 	def __repr__(self):
 		return "<Roll object Student: {} is in Class: {}>".format(self.student_id, self.class_id)
@@ -108,8 +104,6 @@ class RFIDStation(db.Model):
 	scan =            db.Column(db.Integer)
 	scanning =        db.Column(db.Boolean, default=False)
 
-	def as_dict(self):
-		return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 	def __repr__(self):
 		return '<Station {}>'.format(self.name)

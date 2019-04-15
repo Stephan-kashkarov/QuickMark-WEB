@@ -149,16 +149,24 @@ def student_gen():
 def student_db(class_name):
     if request.is_json:
         data = request.get_json()
+        print(f"Request: {data}")
         try:
-            # Sorry for this monstrosity
-            # i just wanted to make a generalised view
-            query = [
-                x.as_dict() for x in model_dict[
+            querys = []
+            for val in list(data['val']):
+                query = model_dict[
                     class_name.lower()
                 ].query.filter(
-                    eval(data['key']).contains(data['val'])
+                    eval(data['key']).contains(val)
                 ).all()
-            ]
+                querys.extend(query)
+            for index, obj in enumerate(querys):
+                querys[index] = obj.__dict__
+                querys[index].pop('_sa_instance_state')
+            print("-"*20)
+            print(querys)
+            print("-"*20)
+            querys = [dict(t) for t in {tuple(d.items()) for d in querys}]
+            print(querys)
             return jsonify(
                 query
             ), 200
