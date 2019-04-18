@@ -160,15 +160,13 @@ def student_db(class_name):
                 ).all()
                 querys.extend(query)
             for index, obj in enumerate(querys):
-                querys[index] = obj.__dict__
-                querys[index].pop('_sa_instance_state')
-            print("-"*20)
-            print(querys)
-            print("-"*20)
+                student_json = obj.__dict__
+                if student_json.get('_sa_instance_state', False):
+                    student_json.pop('_sa_instance_state')
+                querys[index] = student_json
             querys = [dict(t) for t in {tuple(d.items()) for d in querys}]
-            print(querys)
             return jsonify(
-                query
+                querys
             ), 200
         except KeyError:
             return "Invalid JSON format", 400

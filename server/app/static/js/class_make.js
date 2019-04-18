@@ -15,25 +15,26 @@ let temp_students = []
 let searchVal = "name"
 
 function updateThings() {
-    let active_search = ($("#name-selected").hasClass("active")) ?
-        "student_name" :
-        "student_id"
+    let active_search = ($("#name-selected").hasClass("active"))
+        ? "student_name"
+        : "student_id"
     let resp = $.ajax({
         type: "POST",
         contentType: 'application/json;charset=UTF-8',
         url: "/api/db/query/Student",
         data: JSON.stringify({
             "key": `Student.${active_search}`,
-            "val": $(".search-text-input").val(),
+            "val": [$(".search-text-input").val()],
         }),
         async: false,
     })
 
     $(".search-students").empty()
-    let data = JSON.parse(resp.responseText).filter((student) => {
-        students.contains(student) < 0
+    let data = JSON.parse(resp.responseText)
+    data.filter((student) => {
+        students.includes(student) < 0
     })
-    data.map((student) => {
+    data.splice(0, 8).map((student) => {
         $(".search-students").append([student].map(student_card).join(""))
     })
 }
@@ -74,7 +75,7 @@ $(() => {
         }, 100)
         $(this).removeClass("added-student").addClass("student")
         let id = parseInt($(this).find('.id').text())
-        students.splice(students.indexOf(id), 1)
+        temp_students.pop(students.indexOf(id))
     }).on('mouseenter', '.added-student', function () {
         $(this).animate({
             backgroundColor: "#007bff",
@@ -126,7 +127,7 @@ $(() => {
                 contentType: 'application/json;charset=UTF-8',
                 dataType: 'jsonp',
                 data: data,
-            }).fail((resp) => {
+            }).done((resp) => {
                 if (resp.status === 200 || resp.status === 201) {
                     $.notify({
                         message: "Class created!, Redirecting!",
