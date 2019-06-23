@@ -50,8 +50,22 @@ $(() => {
     $(".selected-students").hide() // hides second tab
 
     $(".changes-apply").on('click', () => {
+        console.log(`Temp students: ${temp_students}`)
         students.push(temp_students.slice())
         temp_students = []
+        data = JSON.stringify({
+            "key": "Student.id",
+            "val": students
+        })
+        $.ajax({
+            type: "POST",
+            url: "/api/db/query/Student",
+            contentType: 'application/json;charset=UTF-8',
+            dataType: 'jsonp',
+            data: data,
+        }).done((r) => {
+            console.log(r)
+        })
     })
 
     // look at this chain lol
