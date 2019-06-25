@@ -10,6 +10,7 @@ class Development(Config):
     ENV = 'dev'
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
+
 class Testing(Config):
     PORT = 5000
     DEBUG = False
