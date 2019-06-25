@@ -125,5 +125,3 @@ dmypy.json
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 
-# annoying stuff
-embedded/Arduino/RFID_SERVER/.vscode/.browse.c_cpp.db
