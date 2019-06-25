@@ -2,7 +2,7 @@ from app.data import db
 from app.data.models import Base
 
 
-class Class(base):
+class Class(Base):
     __tablename__ = "class"
 
     title = db.Column(db.String(50))

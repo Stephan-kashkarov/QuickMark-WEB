@@ -18,6 +18,13 @@ class Testing(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite://'
 
 
+class Production(Config):
+    PORT = 5000
+    Testing = False
+    Debug = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite://'
+
+
 config = {
     'dev': Development,
     'prod': Production,
