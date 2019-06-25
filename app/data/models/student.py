@@ -1,10 +1,10 @@
 from app.data import db
-from app.data.models import Base
 
 
-class Student(Base):
+class Student(db.Model):
     __tablename__ = "student"
 
+    id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer)
     student_name = db.Column(db.String(50))
     rfid = db.Column(db.Integer)

@@ -1,10 +1,10 @@
 from app.data import db
-from app.data.models import Base
 
 
-class Station(Base):
+class Station(db.Model):
     __tablename__ = "station"
 
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     password_hash = db.Column(db.String(128))
     linked_roll = db.Column(db.Integer, db.ForeignKey('roll.id'))

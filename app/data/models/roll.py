@@ -1,10 +1,12 @@
 from app.data import db
-from app.data.models import Base
+
+from datetime import datetime
 
 
-class Roll(Base):
+class Roll(db.Model):
     __tablename__ = "roll"
 
+    id = db.Column(db.Integer, primary_key=True)
     time = db.Column(db.DateTime, default=datetime.now())
     class_id = db.Column(db.Integer)
     roll = db.relationship("Roll_Student", backref="roll", lazy="dynamic")

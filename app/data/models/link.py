@@ -1,13 +1,12 @@
 from app.data import db
-from app.data.models import Base
 
 
-class Access(Base):
+class Access(db.Model):
     __tablename__ = "access"
 
-    person_id = db.Column(
+    user_id = db.Column(
         db.Integer,
-        db.ForeignKey("person.id"),
+        db.ForeignKey("user.id"),
         primary_key=True
     )
     class_id = db.Column(
@@ -17,7 +16,7 @@ class Access(Base):
     )
 
 
-class Roll_Student(Base):
+class Roll_Student(db.Model):
     __tablename__ = "roll_student"
     extend_existing = True
     roll_id = db.Column(
@@ -40,7 +39,7 @@ class Roll_Student(Base):
     )
 
 
-class Class_Student(Base):
+class Class_Student(db.Model):
     __tablename__ = "class_student"
 
     roll_id = db.Column(

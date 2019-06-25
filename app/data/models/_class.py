@@ -1,10 +1,10 @@
 from app.data import db
-from app.data.models import Base
 
 
-class Class(Base):
+class Class(db.Model):
     __tablename__ = "class"
 
+    id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50))
     desc = db.Column(db.String(200))
     users = db.relationship(
