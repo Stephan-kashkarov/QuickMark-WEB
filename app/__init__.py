@@ -7,25 +7,31 @@ from config import configure_app
 
 from app.data import db
 
-app = Flask(__name__)
 
-configure_app(app, 'dev')
-
-cors = CORS(app, resources={
-    r'/api/*': {
-        'origins': app.config['ORIGINS']
-    }
-})
-
-db.init_app(app)
-migrate = Migrate(app, db)
-login = LoginManager(app)
+migrate = Migrate(db)
+login = LoginManager()
 login.login_view = 'api.user.login'
 
-from app.data.models import models
-from app.api import controllers
 
-for prefix, bp in controllers:
-    app.register_blueprint(bp, prefix=f"/api{prefix}")
+def create_app(config="prod"):
+    app = Flask(__name__)
+    configure_app(app, config)
 
-app.url_map.strict_slashes = False
+    cors = CORS(app, resources={
+        r'/api/*': {
+            'origins': app.config['ORIGINS']
+        }
+    })
+
+    db.init_app(app)
+    migrate.init_app(app)
+    login.init_app(app)
+    app.url_map.strict_slashes = False
+
+    from app.data.models import models
+    from app.api import controllers
+
+    for prefix, bp in controllers:
+        app.register_blueprint(bp, prefix=f"/api{prefix}")
+
+    return app
