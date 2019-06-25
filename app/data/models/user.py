@@ -1,6 +1,8 @@
 from app import login
 from app.data import db
 from flask_login import UserMixin
+from hashlib import md5
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 @login.user_loader
